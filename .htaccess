@@ -1,6 +1,6 @@
 AddDefaultCharset utf-8
 Options -Indexes
-DirectoryIndex index.php index.html
+DirectoryIndex index.php index.html index.htm
 #
 #Options +FollowSymlinks
 RewriteEngine on

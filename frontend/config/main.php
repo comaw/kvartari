@@ -10,7 +10,7 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'timeZone' => 'Europe/Kiev',
+    'timeZone' => 'Europe/Moscow',
     'name' => \Yii::t('app', 'Kvartari'),
     'controllerNamespace' => 'frontend\controllers',
     'modules' => [
@@ -20,6 +20,30 @@ return [
         ],
     ],
     'components' => [
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => null,
+                    'js' => []
+                ],
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'js'=>[]
+                ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'sourcePath' => null,
+                    'css' => [],
+                    'js' => [],
+                ],
+            ],
+        ],
+        'formatter' => [
+            'timeZone' => 'Europe/Moscow',
+            'dateFormat' => 'dd.MM.yyyy',
+            'datetimeFormat' => 'dd/MM/yyyy H:i:s',
+            'decimalSeparator' => ',',
+            'thousandSeparator' => ' ',
+            'currencyCode' => '',
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
             'enableCsrfValidation' => true,

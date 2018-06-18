@@ -1,0 +1,81 @@
+.electrolock-img-cont, .electrolock-text-cont{
+	display:inline-block;
+	font-size: 18px;
+	text-align:center;
+	vertical-align: middle;
+	color:#000;
+}
+
+.electrolock-cont{
+	background-color: rgba(255, 255, 255, 0.7);
+	border-left: 1px solid #ffffff;
+	border-bottom: 1px solid #ffffff;
+	padding:4px;
+	position:absolute;
+	top:0px;
+	left:60%;
+	right:0px;
+	z-index:5;
+}
+
+.price-header-cont, .price-text-cont{
+	display:inline-block;
+	text-align:center;
+	vertical-align: middle;
+}
+.price-header-cont{
+	font-size:18px;
+	color:white;
+}
+
+.price-text-cont{
+	font-size:30px;
+	color:white;
+}
+
+.price-cont{
+	background-color: rgba(0, 0, 0, 0.7);
+	/*border-left: 1px solid #ffffff;
+	border-top: 1px solid #ffffff;*/
+	padding:4px 4px 6px 4px;
+	position:absolute;
+	bottom:0px;
+	left:78%;
+	right:0px;
+	z-index:6;
+}
+
+.notify-link{
+	color:white!important;
+}
+
+#book-form .chzn-container-single .chzn-single{
+  height: 30px;
+  line-height: 30px;
+}
+
+#main .row .carousel {
+	margin-bottom: 0px;
+}
+
+div.form div.error input,
+div.form div.error textarea,
+div.form div.error select,
+div.form input.error,
+div.form textarea.error,
+div.form select.error
+{
+    background: #FEE;
+    border-color: #C00;
+}
+
+.error-flash{
+	background-color:rgba(255,155,155,0.5);
+	border: 2px solid rgba(255,120,120,0.5);
+	padding:5px;
+}
+
+.note {
+	font-style: italic;
+	font-size:12px
+}

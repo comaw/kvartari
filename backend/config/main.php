@@ -14,7 +14,7 @@ return [
     'sourceLanguage'=>'en_US',
     'language' => 'ru',
     'charset' => 'UTF-8',
-    'timeZone' => 'Europe/Kiev',
+    'timeZone' => 'Europe/Moscow',
     'name' => \Yii::t('app', 'Admin'),
     'modules' => [],
     'components' => [
