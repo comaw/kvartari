@@ -11,10 +11,17 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
+    'sourceLanguage'=>'en_US',
+    'language' => 'ru',
+    'charset' => 'UTF-8',
+    'timeZone' => 'Europe/Kiev',
+    'name' => \Yii::t('app', 'Admin'),
     'modules' => [],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'enableCsrfValidation' => true,
+            'cookieValidationKey' => 'jksh3786(dfhda56456$(W^sfdewrt25_I($I5869w',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -37,14 +44,7 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
+        'urlManager' => include (__DIR__ . '/urlManager.php')
     ],
     'params' => $params,
 ];

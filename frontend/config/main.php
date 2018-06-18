@@ -10,10 +10,21 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'timeZone' => 'Europe/Kiev',
+    'name' => \Yii::t('app', 'Kvartari'),
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'gii' => [
+            'class' => 'yii\gii\Module',
+            'allowedIPs' => ['127.0.0.1', '::1']
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'enableCsrfValidation' => true,
+            'cookieValidationKey' => 'jksh3786($(W^sfdewrt25_I($I5869w',
+            'baseUrl' => '',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -36,14 +47,7 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
+        'urlManager' => include (__DIR__ . '/urlManager.php'),
     ],
     'params' => $params,
 ];
