@@ -22,6 +22,7 @@ return [
             'csrfParam' => '_csrf-backend',
             'enableCsrfValidation' => true,
             'cookieValidationKey' => 'jksh3786(dfhda56456$(W^sfdewrt25_I($I5869w',
+            'baseUrl' => '/admin'
         ],
         'user' => [
             'identityClass' => 'common\models\User',
