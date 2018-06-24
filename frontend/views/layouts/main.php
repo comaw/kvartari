@@ -4,8 +4,7 @@
 /* @var $content string */
 
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
+use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
@@ -19,12 +18,30 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
-    <link rel="shortcut icon" href="/css/favicon.png" type="image/png">
+    <link rel="canonical" href="<?=Url::canonical()?>"/>
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?><?= $this->title ? ' - ' : '' ?><?= Html::encode(Yii::$app->name) ?></title>
     <?php $this->head() ?>
 
     <link rel="shortcut icon" href="/img/favicon.png" type="image/png">
+    <?php
+    $this->registerMetaTag([
+        'property' => 'og:title',
+        'content' => Html::encode($this->title) . ($this->title ? ' - ' : '') . Html::encode(Yii::$app->name)
+    ]);
+    $this->registerMetaTag([
+        'property' => 'og:type',
+        'content' => 'website'
+    ]);
+    $this->registerMetaTag([
+        'property' => 'og:url',
+        'content' => Url::canonical()
+    ]);
+    $this->registerMetaTag([
+        'property' => 'og:image',
+        'content' => '/img/logo.png'
+    ]);
+    ?>
 </head>
 <body>
 <?php $this->beginBody() ?>

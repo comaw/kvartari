@@ -15,6 +15,7 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%user}}', [
             'id' => $this->primaryKey(11)->unsigned(),
             'username' => $this->string()->notNull()->unique(),
+            'phone' => $this->string()->notNull()->unique(),
             'role' => " SET('tenant','owner','admin') NOT NULL DEFAULT 'tenant' ",
             'auth_key' => $this->string(32)->notNull(),
             'password_hash' => $this->string()->notNull(),

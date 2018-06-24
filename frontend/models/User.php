@@ -1,21 +1,19 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: comaw
+ * Date: 24.06.2018
+ * Time: 14:26
+ */
+
 namespace frontend\models;
 
 use Yii;
-use yii\base\Model;
-use common\models\User;
 
-/**
- * Signup form
- */
-class SignupForm extends Model
+class User extends \common\models\User
 {
-    public $username;
-    public $phone;
-    public $email;
     public $password;
     public $confirm;
-    public $verifyCode;
 
     /**
      * {@inheritdoc}
@@ -40,46 +38,23 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' =>  Yii::t('app','This username has already been taken.')],
+            ['username', 'unique', 'message' =>  Yii::t('app','This username has already been taken.')],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' =>  Yii::t('app','This email address has already been taken.')],
+            ['email', 'unique', 'message' =>  Yii::t('app','This email address has already been taken.')],
 
             ['phone', 'trim'],
             ['phone', 'required'],
-            ['phone', 'unique', 'targetClass' => '\common\models\User', 'message' =>  Yii::t('app','This phone has already been taken.')],
+            ['phone', 'unique', 'message' =>  Yii::t('app','This phone has already been taken.')],
             ['phone', 'match', 'pattern' => "/^\+([0-9]{1})\([0-9]{3}\)([0-9]{3})\-([0-9]{2})\-([0-9]{2})$/Ui", 'message' =>  Yii::t('app','Phone has incorrect format')],
 
-            ['password', 'required'],
             ['password', 'string', 'min' => 6, 'max' => 100],
 
             [['confirm'], 'compare', 'compareAttribute'=> 'password', 'message'=> Yii::t('app', 'Passwords do not match')],
-            [['verifyCode'], \common\recaptcha\ReCaptchaValidator::class, 'secret' => \common\recaptcha\ReCaptcha::SECRET_KEY],
         ];
-    }
-
-    /**
-     * Signs user up.
-     *
-     * @return User|null the saved model or null if saving fails
-     */
-    public function signup()
-    {
-        if (!$this->validate()) {
-            return null;
-        }
-        
-        $user = new User();
-        $user->username = $this->username;
-        $user->email = $this->email;
-        $user->phone = $this->phone;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
-        
-        return $user->save() ? $user : null;
     }
 }

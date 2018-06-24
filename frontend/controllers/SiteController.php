@@ -5,7 +5,6 @@ use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -29,21 +28,10 @@ class SiteController extends Controller
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -86,6 +74,15 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
+        $modelSignUp = new SignupForm();
+        if ($modelSignUp->load(Yii::$app->request->post())) {
+            if ($user = $modelSignUp->signup()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            }
+        }
+
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
@@ -94,6 +91,7 @@ class SiteController extends Controller
 
             return $this->render('login', [
                 'model' => $model,
+                'modelSignUp' => $modelSignUp,
             ]);
         }
     }

@@ -9,6 +9,7 @@ return [
     'language' => 'ru',
     'charset' => 'UTF-8',
     'components' => [
+        'mailer' => include (__DIR__ . '/mail.php'),
         'cache' => [
             'class' => 'yii\caching\DbCache',
         ],

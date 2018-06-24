@@ -6,12 +6,14 @@
  * Time: 00:31
  */
 
+use yii\helpers\Url;
+
 ?>
 <div class="account pull-right">
     <ul class="nav nav-pills">
         <?php if (Yii::$app->user->isGuest) { ?>
-        <li >
-            <a href="/user/login">Вход / Регистрация</a>
+        <li>
+            <a href="<?=Url::toRoute(['site/login'])?>" title="Вход / Регистрация">Вход / Регистрация</a>
         </li>
         <?php } ?>
 		<?php if (!Yii::$app->user->isGuest) { ?>
@@ -25,10 +27,10 @@
             <a href="/realty/calendar">Календарь занятости</a>
         </li>
         <li>
-            <a href="/user/profile">Профиль</a>
+            <a href="<?=Url::toRoute(['user/profile'])?>" title="Профиль">Профиль</a>
         </li>
         <li>
-            <a href="/user/logout">Выйти</a>
+            <a href="<?=Url::toRoute(['site/logout'])?>" title="Выйти">Выйти</a>
         </li>
         <?php } ?>
     </ul>

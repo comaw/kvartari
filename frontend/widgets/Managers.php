@@ -29,6 +29,6 @@ class Managers extends Widget
      */
     public function run()
     {
-        return $this->render('Managers', []);
+        return $this->render('managers', []);
     }
 }

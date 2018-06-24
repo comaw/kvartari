@@ -29,6 +29,6 @@ class Footer extends Widget
      */
     public function run()
     {
-        return $this->render('Footer', []);
+        return $this->render('footer', []);
     }
 }

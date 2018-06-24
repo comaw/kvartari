@@ -29,6 +29,6 @@ class Top extends Widget
      */
     public function run()
     {
-        return $this->render('Top', []);
+        return $this->render('top', []);
     }
 }

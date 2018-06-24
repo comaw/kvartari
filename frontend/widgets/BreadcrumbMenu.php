@@ -29,6 +29,6 @@ class BreadcrumbMenu extends Widget
      */
     public function run()
     {
-        return $this->render('BreadcrumbMenu', []);
+        return $this->render('breadcrumbMenu', []);
     }
 }

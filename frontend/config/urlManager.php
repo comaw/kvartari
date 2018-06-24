@@ -11,15 +11,18 @@ return [
     'showScriptName' => false,
     'enableStrictParsing' => true,
     'baseUrl' => '/',
-    'suffix' => '/',
+    'suffix' => '',
     'scriptUrl'=>'/frontend/index.php',
     'rules' => [
         '' => 'site/index',
 
-        'signin' => 'site/login',
-        'signup' => 'site/signup',
+        'user/login' => 'site/login',
+        'user/logout' => 'site/logout',
         'passwordreset' => 'site/requestpasswordreset',
         'resetpassword' => 'site/resetpassword',
+
+        'realty/create' => 'realty/create',
+        'articles/<url:[\w\d\_\-]+>' => 'article/view',
 
         '<controller:\w+>/<id:\d+>/<action:(create|update|delete)>' => '<controller>/<action>',
         '<controller:\w+>/<action:\w+>' => '<controller>/<action>',

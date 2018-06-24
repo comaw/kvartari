@@ -21,7 +21,7 @@ class AppAsset extends AssetBundle
         'css/main/realia-blue.css',
     ];
     public $js = [
-        'js/jquery.min.js',
+//        'js/jquery.min.js',
         'js/bootstrap.min.js',
         'js/jquery-ui.min.js',
         'http://maps.googleapis.com/maps/api/js?v=3&amp;amp;sensor=true',

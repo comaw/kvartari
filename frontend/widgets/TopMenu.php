@@ -29,6 +29,6 @@ class TopMenu extends Widget
      */
     public function run()
     {
-        return $this->render('TopMenu', []);
+        return $this->render('topMenu', []);
     }
 }
