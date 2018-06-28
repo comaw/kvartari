@@ -8,13 +8,13 @@ use Yii;
  * This is the model class for table "{{%realty}}".
  *
  * @property string $id
+ * @property string $url
  * @property string $status_id
  * @property string $user_id
  * @property string $country_id
  * @property string $city_id
  * @property string $type_housing_id
  * @property int $places
- * @property int $Столбец 8
  * @property string $street
  * @property string $house
  * @property string $housing
@@ -59,12 +59,13 @@ class Realty extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status_id', 'user_id', 'country_id', 'city_id', 'type_housing_id', 'places', 'street', 'footage', 'number_rooms', 'price', 'title', 'description'], 'required'],
+            [['url', 'status_id', 'user_id', 'country_id', 'city_id', 'type_housing_id', 'places', 'street', 'footage', 'number_rooms', 'price', 'title', 'description'], 'required'],
             [['status_id', 'user_id', 'country_id', 'city_id', 'type_housing_id', 'places', 'footage', 'number_rooms', 'pledge', 'price'], 'integer'],
             [['created', 'updated'], 'safe'],
             [['description', 'laws'], 'string'],
             [['longitude', 'latitude'], 'number'],
-            [['street', 'house', 'housing', 'apartment', 'title'], 'string', 'max' => 255],
+            [['url', 'street', 'house', 'housing', 'apartment', 'title'], 'string', 'max' => 255],
+            [['url'], 'unique'],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
             [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => Country::class, 'targetAttribute' => ['country_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
@@ -80,6 +81,7 @@ class Realty extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'url' => Yii::t('app', 'Url'),
             'status_id' => Yii::t('app', 'Status ID'),
             'user_id' => Yii::t('app', 'User ID'),
             'country_id' => Yii::t('app', 'Country ID'),

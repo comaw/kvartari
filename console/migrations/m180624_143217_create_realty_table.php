@@ -14,6 +14,7 @@ class m180624_143217_create_realty_table extends Migration
     {
         $this->createTable('{{%realty}}', [
             'id' => $this->primaryKey(11)->unsigned(),
+            'url' => $this->string(255)->notNull()->unique(),
             'status_id' => $this->integer(11)->unsigned()->notNull(),
             'user_id' => $this->integer(11)->unsigned()->notNull(),
             'country_id' => $this->integer(11)->unsigned()->notNull(),

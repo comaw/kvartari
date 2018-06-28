@@ -15,4 +15,16 @@ namespace frontend\models;
 class RealtyView extends \common\models\RealtyView
 {
 
+    /**
+     * @return bool
+     */
+    public function beforeValidate()
+    {
+        if ($this->isNewRecord) {
+            $this->views = 1;
+            $this->updated = time();
+        }
+
+        return parent::beforeValidate();
+    }
 }

@@ -23,6 +23,6 @@ class TypeHousing extends \common\models\base\TypeHousing
      */
     public static function getDropDown(string $from = 'id', string $to = 'name'): array
     {
-        return ArrayHelper::map(static::find()->orderBy('id')->all(), $from, $to);
+        return ArrayHelper::map(static::find()->select([$from, $to])->orderBy('id')->all(), $from, $to);
     }
 }

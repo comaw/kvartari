@@ -12,6 +12,8 @@ use yii\helpers\Url;
 use frontend\models\Country;
 use frontend\models\City;
 use frontend\models\TypeHousing;
+use frontend\models\Service;
+use frontend\models\DeviceService;
 
 /** @var $model \frontend\models\Realty */
 
@@ -37,7 +39,7 @@ $this->registerMetaTag([
                             'id' => 'realty-form',
                             'options' => ['enctype' => 'multipart/form-data'],
                             'fieldConfig' => [
-                                'template' => "{label}\n{input}\n{error}",
+                                'template' => "{label}\n{input}\n{hint}\n{error}",
                             ],
                     ]); ?>
                     <div class="row">
@@ -133,36 +135,15 @@ $this->registerMetaTag([
                     <div class="row">
                         <div class="span4">
                             <h3><strong>3.</strong> <span>В квартире</span></h3>
-<!--                            --><?php //echo CHtml::checkBoxList('Additions', '',  CHtml::listData(Additions::model()->findAll(),
-//                                'id_additions', 'name'), array('separator' => '')) ?>
-                        </div><!-- /.span3 -->
+                            <?= $form->field($model, 'serviceDeviceIds')->checkboxList(DeviceService::getDropDown())->label('') ?>
+                        </div>
                         <div class="span4">
                             <h3><strong>4.</strong> <span>Фотографии</span></h3>
-<!--                            --><?php
-//                            $this->widget('CMultiFileUpload', array(
-//                                'name'=>'photos',
-//                                'accept'=>'jpg|gif|png',
-//                                'options'=>array(
-//                                    // 'onFileSelect'=>'function(e, v, m){ alert("onFileSelect - "+v) }',
-//                                    // 'afterFileSelect'=>'function(e, v, m){ alert("afterFileSelect - "+v) }',
-//                                    // 'onFileAppend'=>'function(e, v, m){ alert("onFileAppend - "+v) }',
-//                                    // 'afterFileAppend'=>'function(e, v, m){ alert("afterFileAppend - "+v) }',
-//                                    // 'onFileRemove'=>'function(e, v, m){ alert("onFileRemove - "+v) }',
-//                                    // 'afterFileRemove'=>'function(e, v, m){ alert("afterFileRemove - "+v) }',
-//                                ),
-//                                'denied'=>'File is not allowed',
-//                                'max'=>10, // max 10 files
-//
-//
-//                            ));
-//                            ?>
+                            <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*'])->label('')->hint(Yii::t('app', 'Можно выбрать до 10 файлов за раз')) ?>
                         </div>
                         <div class="span4">
                             <h3><strong>5.</strong> <span>Вам требуются услуги?</span></h3>
-<!--                            --><?php //echo CHtml::checkBoxList('OwnerServices', '',  CHtml::listData(OwnerServices::model()->findAll(),
-//                                'id', function($service){
-//                                    return '<span data-toggle="tooltip" data-placement="right" title="'.$service->description.'">'.$service->name.' ('.$service->price.' руб.)</span>';
-//                                }), array('separator' => '')) ?>
+                            <?= $form->field($model, 'servicesIds')->checkboxList(Service::getDropDownWithPrices())->label('') ?>
                         </div>
                     </div>
                     <div class="row" style="text-align:center">
