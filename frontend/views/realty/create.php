@@ -126,7 +126,7 @@ $this->registerMetaTag([
                         </div>
                         <div class="span4">
                             <h3><strong></strong> <span>Карта</span></h3>
-                            <div id="mapq" style="width:90%;height:360px"></div>
+                            <div id="map-create-realty" style="width:90%;height:360px"></div>
                             <?= $form->field($model, 'longitude')->hiddenInput()->label('') ?>
                             <?= $form->field($model, 'latitude')->hiddenInput()->label('') ?>
                         </div>
@@ -155,3 +155,76 @@ $this->registerMetaTag([
         </div>
     </div>
 </div>
+<?php
+$apiKey = Yii::$app->params['mapApiKey'];
+$script = <<< JS
+    function loc() {
+        var country = jQuery("#realty-country_id option:selected").text();
+        var city = jQuery("#realty-city_id option:selected").text();
+        var street = jQuery("#realty-street").val();
+        var house = jQuery("#realty-house").val();
+        var housing = jQuery("#realty-housing").val();
+        if (!country || !city || !street) {
+            return false;
+        }
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + country + ' ' + city + ' ' + street + ' дом ' + house + ' корпус ' + housing + '&sensor=false&language=ru&key={$apiKey}';
+        jQuery.getJSON(url).done(function(data) {
+            if (data.status == 'OK') {
+                var lat = data.results[0].geometry.location.lat || 60.0419640;
+                var lng = data.results[0].geometry.location.lng || 30.2686629;
+                jQuery("#realty-longitude").val(lng);
+                jQuery("#realty-latitude").val(lat);
+                initialize(lat, lng);
+            }
+        });
+    }
+    
+    jQuery(document).on('blur','#realty-street, #realty-city_id, #realty-country_id, #realty-house, #realty-housing', function() {
+        loc();
+    });
+    jQuery(document).on('change','#realty-city_id, #realty-country_id', function() {
+        loc();
+    });
+        
+   
+    var map;
+      function initialize(lat, lng) {
+          if (!lat) {
+              lat = 60.0419640;
+          }
+          if (!lng) {
+              lng = 30.2686629;
+          }
+        var mapOptions = {
+          zoom: 10,
+          center: {lat: lat, lng: lng}
+        };
+        map = new google.maps.Map(document.getElementById('map-create-realty'),
+            mapOptions);
+
+        var marker = new google.maps.Marker({
+          // The below line is equivalent to writing:
+          // position: new google.maps.LatLng(-34.397, 150.644)
+          position: {lat: lat, lng: lng},
+          map: map
+        });
+
+        // You can use a LatLng literal in place of a google.maps.LatLng object when
+        // creating the Marker object. Once the Marker object is instantiated, its
+        // position will be available as a google.maps.LatLng object. In this case,
+        // we retrieve the marker's position using the
+        // google.maps.LatLng.getPosition() method.
+        var infowindow = new google.maps.InfoWindow({
+          content: '<p>Marker Location:' + marker.getPosition() + '</p>'
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(map, marker);
+        });
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize(60.0419640, 30.268662));
+JS;
+
+$this->registerJsFile('https://maps.googleapis.com/maps/api/js?key=' . Yii::$app->params['mapApiKey'],  ['position' => yii\web\View::POS_HEAD]);
+$this->registerJs($script, yii\web\View::POS_END);

@@ -10,4 +10,5 @@ return [
     'imageNormalH' => 180,
     'imageMaxW' => 600,
     'imageMaxH' => 400,
+    'mapApiKey' => 'AIzaSyC2kzWsENuJZC41CuG9tC_rXoTdCJz_Lmo',
 ];

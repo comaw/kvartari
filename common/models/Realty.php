@@ -23,7 +23,7 @@ class Realty extends \common\models\base\Realty
     public function beforeValidate()
     {
         if (!$this->url) {
-            $this->url = mb_substr($this->title, 0, 240, Yii::$app->charset) . '_' . $this->country_id . '_' . $this->city_id . '_' . date("d");
+            $this->url = mb_substr($this->title, 0, 180, Yii::$app->charset) . '-' . mb_substr($this->street, 0, 50, Yii::$app->charset) . ($this->house ? '-' . $this->house : '') . '-' . $this->price . '-' . date("d-s");
         }
         $this->url = UrlHelper::translateUrl($this->url);
 
