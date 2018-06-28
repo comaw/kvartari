@@ -21,6 +21,7 @@ class m180624_143217_create_realty_table extends Migration
             'type_housing_id' => $this->integer(11)->unsigned()->notNull(),
             'term_id' => $this->integer(11)->unsigned()->notNull(),
             'street' => $this->string(255)->notNull(),
+            'places' => $this->integer(11)->notNull(),
             'house' => $this->string(255)->null()->defaultValue(null),
             'housing' => $this->string(255)->null()->defaultValue(null),
             'apartment' => $this->string(255)->null()->defaultValue(null),
@@ -33,6 +34,8 @@ class m180624_143217_create_realty_table extends Migration
             'title' => $this->string(255)->notNull(),
             'description' => $this->text()->notNull(),
             'laws' => $this->text()->null()->defaultValue(null),
+            'longitude' => $this->decimal(11, 8)->null(),
+            'latitude' => $this->decimal(11, 8)->null(),
         ]);
 
         $this->createIndex('status_id', '{{%realty}}', 'status_id');
