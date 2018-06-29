@@ -200,6 +200,6 @@ class Realty extends \common\models\Realty
      */
     public function getImages()
     {
-        return $this->hasMany(Image::class, ['realty_id' => 'id']);
+        return $this->hasMany(Image::class, ['realty_id' => 'id'])->orderBy('position ASC');
     }
 }

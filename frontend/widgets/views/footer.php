@@ -27,7 +27,7 @@ use yii\helpers\Html;
                                 <div class="image">
                                     <?=Html::a('', ['realty/detail', 'url' => $model->url])?>
                                     <?php if (isset($model->images[0])) { ?>
-                                    <img src="<?=$model->images[0]->getPhotoPath()?>" alt="<?=Html::encode($model->images[0]->title)?>" style="width:100px;height:74px">
+                                    <img src="<?=$model->images[0]->getPhotoPath(Realty::IMAGE_MINI)?>" alt="<?=Html::encode($model->images[0]->title)?>" style="width:100px;height:74px">
                                     <?php } ?>
                                 </div>
                                 <div class="wrapper">
