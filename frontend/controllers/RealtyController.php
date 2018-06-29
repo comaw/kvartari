@@ -42,7 +42,7 @@ class RealtyController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Realty();
+        $model = new Realty(['scenario' => 'create']);
         $model->status_id = 1;
         $model->user_id = Yii::$app->user->id;
 //        $model->setServicesIds();

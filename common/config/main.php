@@ -11,6 +11,9 @@ return [
     'components' => [
         'mailer' => include (__DIR__ . '/mail.php'),
         'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
+        'cacheDb' => [
             'class' => 'yii\caching\DbCache',
         ],
         'cacheFile' => [

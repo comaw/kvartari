@@ -15,12 +15,12 @@ use yii\helpers\Html;
 use Yii;
 
 /**
- * Class Footer
+ * Class NewRealty
  * @package frontend\widgets
  */
-class Footer extends Widget
+class NewRealty extends Widget
 {
-    const LIMIT_VIEWS = 3;
+    const LIMIT_VIEWS = 4;
 
     public function init()
     {
@@ -35,7 +35,7 @@ class Footer extends Widget
     {
         $models = Realty::getDb()->cache(function ($db) {
             return Realty::find()
-                ->with(['images', 'country', 'city'])
+                ->with(['images', 'city'])
                 ->innerJoinWith(['realtyView'])
                 ->where(['=', 'status_id', Status::STATUS_ACTIVE])
                 ->orderBy('{{%realty_view}}.updated DESC')
@@ -43,6 +43,6 @@ class Footer extends Widget
                 ->all();
         }, Yii::$app->params['mysqlQueriesCache']);
 
-        return $this->render('footer', ['models' => $models]);
+        return $this->render('newRealty', ['models' => $models]);
     }
 }

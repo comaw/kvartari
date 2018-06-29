@@ -182,6 +182,7 @@ class Realty extends \common\models\Realty
             [['serviceDeviceIds'], 'each', 'rule' => ['integer']],
             [['termIds'], 'each', 'rule' => ['integer']],
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif', 'maxFiles' => 10],
+            [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg, gif', 'maxFiles' => 10, 'skipOnEmpty' => false, 'on' => 'create'],
         ]);
     }
 

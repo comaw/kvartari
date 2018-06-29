@@ -15,12 +15,12 @@ use yii\helpers\Html;
 use Yii;
 
 /**
- * Class Footer
+ * Class SpecialRealty
  * @package frontend\widgets
  */
-class Footer extends Widget
+class SpecialRealty extends Widget
 {
-    const LIMIT_VIEWS = 3;
+    const LIMIT_VIEWS = 9;
 
     public function init()
     {
@@ -43,6 +43,6 @@ class Footer extends Widget
                 ->all();
         }, Yii::$app->params['mysqlQueriesCache']);
 
-        return $this->render('footer', ['models' => $models]);
+        return $this->render('specialRealty', ['models' => $models]);
     }
 }

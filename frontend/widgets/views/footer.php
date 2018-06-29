@@ -25,20 +25,20 @@ use yii\helpers\Html;
                         <?php foreach($models as $model){ ?>
                             <div class="property">
                                 <div class="image">
-                                    <?=Html::a('', ['realty/detail', 'url' => $model->url])?>
+                                    <?=Html::a('', ['realty/detail', 'url' => $model->url], ['title' => Html::encode($model->title)])?>
                                     <?php if (isset($model->images[0])) { ?>
-                                    <img src="<?=$model->images[0]->getPhotoPath(Realty::IMAGE_MINI)?>" alt="<?=Html::encode($model->images[0]->title)?>" style="width:100px;height:74px">
+                                    <img src="<?=$model->images[0]->getPhotoPath(Realty::IMAGE_MINI)?>" alt="<?=Html::encode($model->title)?>" style="width:100px;height:74px">
                                     <?php } ?>
                                 </div>
                                 <div class="wrapper">
                                     <div class="title">
-                                        <h3><?=Html::a(mb_substr($model->title, 0, 15, Yii::$app->charset) . '...', ['realty/detail', 'url' => $model->url])?></h3>
+                                        <h3><?=Html::a(mb_substr($model->title, 0, 15, Yii::$app->charset) . '...', ['realty/detail', 'url' => $model->url], ['title' => Html::encode($model->title)])?></h3>
                                     </div>
                                     <div class="location">
                                         <?=$model->country->name?>, <?=$model->city->name?>
                                     </div>
                                     <div class="price">
-                                        <?=$model->price?> руб.
+                                        <?=Yii::$app->formatter->asDecimal($model->price)?> руб.
                                     </div>
                                 </div>
                             </div>
