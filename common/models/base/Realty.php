@@ -41,6 +41,8 @@ use Yii;
  * @property DeviceService[] $deviceServices
  * @property RealtyService[] $realtyServices
  * @property Service[] $services
+ * @property RealtyTerm[] $realtyTerms
+ * @property Term[] $terms
  * @property RealtyView $realtyView
  */
 class Realty extends \yii\db\ActiveRecord
@@ -184,6 +186,22 @@ class Realty extends \yii\db\ActiveRecord
     public function getServices()
     {
         return $this->hasMany(Service::class, ['id' => 'service_id'])->viaTable('{{%realty_service}}', ['realty_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRealtyTerms()
+    {
+        return $this->hasMany(RealtyTerm::class, ['realty_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTerms()
+    {
+        return $this->hasMany(Term::class, ['id' => 'term_id'])->viaTable('{{%realty_term}}', ['realty_id' => 'id']);
     }
 
     /**

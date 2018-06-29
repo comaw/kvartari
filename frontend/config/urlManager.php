@@ -23,6 +23,7 @@ return [
 
         'realty/create' => 'realty/create',
         'articles/<url:[\w\d\_\-]+>' => 'article/view',
+        'realty/detail/<url:[\w\d\_\-]+>' => 'realty/detail',
 
         '<controller:\w+>/<id:\d+>/<action:(create|update|delete)>' => '<controller>/<action>',
         '<controller:\w+>/<action:\w+>' => '<controller>/<action>',

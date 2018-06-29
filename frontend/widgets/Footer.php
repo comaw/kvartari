@@ -8,6 +8,7 @@
 
 namespace frontend\widgets;
 
+use frontend\models\Realty;
 use yii\base\Widget;
 use yii\helpers\Html;
 use Yii;
@@ -18,6 +19,7 @@ use Yii;
  */
 class Footer extends Widget
 {
+    const LIMIT_VIEWS = 3;
 
     public function init()
     {
@@ -26,9 +28,14 @@ class Footer extends Widget
 
     /**
      * @return string
+     * @throws \Throwable
      */
     public function run()
     {
-        return $this->render('footer', []);
+        $models = Realty::getDb()->cache(function ($db) {
+            return Realty::find()->innerJoinWith(['realtyView'])->orderBy('{{%realty_view}}.updated DESC')->limit(self::LIMIT_VIEWS)->all();
+        }, Yii::$app->params['mysqlQueriesCache']);
+
+        return $this->render('footer', ['models' => $models]);
     }
 }

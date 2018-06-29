@@ -8,7 +8,5 @@ $this->registerMetaTag([
     'content' => Yii::t('app', 'Новые квартиры')
 ]);
 ?>
-<div class="site-index">
 
-
-</div>
+<?=\frontend\widgets\HomePageLinks::widget()?>

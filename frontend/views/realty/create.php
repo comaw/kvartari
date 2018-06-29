@@ -14,6 +14,7 @@ use frontend\models\City;
 use frontend\models\TypeHousing;
 use frontend\models\Service;
 use frontend\models\DeviceService;
+use frontend\models\Term;
 
 /** @var $model \frontend\models\Realty */
 
@@ -133,16 +134,20 @@ $this->registerMetaTag([
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="span4">
+                        <div class="span3">
                             <h3><strong>3.</strong> <span>В квартире</span></h3>
                             <?= $form->field($model, 'serviceDeviceIds')->checkboxList(DeviceService::getDropDown())->label('') ?>
                         </div>
-                        <div class="span4">
-                            <h3><strong>4.</strong> <span>Фотографии</span></h3>
+                        <div class="span3">
+                            <h3><strong>4.</strong> <span>Условия аренды</span></h3>
+                            <?= $form->field($model, 'termIds')->checkboxList(Term::getDropDown())->label('') ?>
+                        </div>
+                        <div class="span3">
+                            <h3><strong>5.</strong> <span>Фотографии</span></h3>
                             <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*'])->label('')->hint(Yii::t('app', 'Можно выбрать до 10 файлов за раз')) ?>
                         </div>
-                        <div class="span4">
-                            <h3><strong>5.</strong> <span>Вам требуются услуги?</span></h3>
+                        <div class="span3">
+                            <h3><strong>6.</strong> <span>Вам требуются услуги?</span></h3>
                             <?= $form->field($model, 'servicesIds')->checkboxList(Service::getDropDownWithPrices())->label('') ?>
                         </div>
                     </div>

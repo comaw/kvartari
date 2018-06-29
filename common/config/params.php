@@ -4,6 +4,8 @@ return [
     'supportEmail' => 'support@example.com',
     'user.passwordResetTokenExpire' => 3600,
 
+    'mysqlQueriesCache' => 5,
+
     'imageMiniW' => 120,
     'imageMiniH' => 75,
     'imageNormalW' => 270,

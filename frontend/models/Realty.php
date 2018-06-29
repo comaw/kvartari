@@ -10,9 +10,11 @@ namespace frontend\models;
 
 use common\CImageHandler;
 use common\lib\ImageHelper;
+use common\models\base\RealtyTerm;
 use common\UrlHelper;
 use yii\helpers\ArrayHelper;
 use frontend\models\RealtyService;
+use frontend\models\Image;
 use yii\web\UploadedFile;
 use Yii;
 
@@ -22,6 +24,7 @@ use Yii;
  *
  * @property array $servicesIds
  * @property array $serviceDeviceIds
+ * @property array $termIds
  * @property UploadedFile[] $imageFiles
  */
 class Realty extends \common\models\Realty
@@ -34,8 +37,35 @@ class Realty extends \common\models\Realty
 
     public $servicesIds = [];
     public $serviceDeviceIds = [];
+    public $termIds = [];
     public $imageFiles;
 
+    /**
+     * @return array
+     */
+    public static function imageSizes(): array
+    {
+        return [
+            self::IMAGE_MAX => self::IMAGE_MAX,
+            self::IMAGE_NORMAL => self::IMAGE_NORMAL,
+            self::IMAGE_MINI => self::IMAGE_MINI,
+        ];
+    }
+
+    /**
+     * @return $this
+     */
+    public function setTermIds()
+    {
+        if (!$this->realtyTerms) {
+            $this->termIds = [];
+
+            return $this;
+        }
+        $this->termIds = ArrayHelper::map($this->realtyTerms, 'term_id', 'term_id');
+
+        return $this;
+    }
 
     /**
      * @return $this
@@ -91,6 +121,15 @@ class Realty extends \common\models\Realty
                 $model->save(false);
             }
         }
+        RealtyTerm::deleteAll(['=', 'term_id', $this->id]);
+        if ($this->termIds) {
+            foreach ($this->termIds as $termId) {
+                $model = new RealtyTerm();
+                $model->realty_id  = $this->id;
+                $model->term_id = $termId;
+                $model->save(false);
+            }
+        }
 
         parent::afterSave($insert, $changedAttributes);
     }
@@ -141,6 +180,7 @@ class Realty extends \common\models\Realty
         return ArrayHelper::merge(parent::rules(), [
             [['servicesIds'], 'each', 'rule' => ['integer']],
             [['serviceDeviceIds'], 'each', 'rule' => ['integer']],
+            [['termIds'], 'each', 'rule' => ['integer']],
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif', 'maxFiles' => 10],
         ]);
     }
@@ -153,5 +193,13 @@ class Realty extends \common\models\Realty
         return ArrayHelper::merge(parent::attributeLabels(), [
             'imageFiles' => Yii::t('app', 'Фотографии')
         ]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImages()
+    {
+        return $this->hasMany(Image::class, ['realty_id' => 'id']);
     }
 }

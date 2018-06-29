@@ -20,7 +20,6 @@ class m180624_143217_create_realty_table extends Migration
             'country_id' => $this->integer(11)->unsigned()->notNull(),
             'city_id' => $this->integer(11)->unsigned()->notNull(),
             'type_housing_id' => $this->integer(11)->unsigned()->notNull(),
-            'term_id' => $this->integer(11)->unsigned()->notNull(),
             'street' => $this->string(255)->notNull(),
             'places' => $this->integer(11)->notNull(),
             'house' => $this->string(255)->null()->defaultValue(null),
