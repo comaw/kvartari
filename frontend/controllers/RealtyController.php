@@ -39,12 +39,11 @@ class RealtyController extends Controller
 
     public function actionList(int $page = 0)
     {
-        $query = Realty::find()
-            ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
-            ->where(['=', 'status_id', Status::STATUS_ACTIVE]);
+        $query = Realty::find()->where(['=', 'status_id', Status::STATUS_ACTIVE]);
         $countQuery = clone $query;
         $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
         $models = $query->offset($pages->offset)
+            ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
             ->limit($pages->limit)
             ->orderBy('id desc')
             ->all();
