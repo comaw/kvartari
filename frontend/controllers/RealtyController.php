@@ -1,8 +1,10 @@
 <?php
 namespace frontend\controllers;
 
+use common\lib\Pagination;
 use frontend\models\Realty;
 use frontend\models\RealtyView;
+use frontend\models\Status;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -35,6 +37,24 @@ class RealtyController extends Controller
         ];
     }
 
+    public function actionList(int $page = 0)
+    {
+        $query = Realty::find()
+            ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
+            ->where(['=', 'status_id', Status::STATUS_ACTIVE]);
+        $countQuery = clone $query;
+        $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy('id desc')
+            ->all();
+
+        return $this->render('list', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);
+    }
+
     /**
      * @param string $url
      * @return string
@@ -42,7 +62,11 @@ class RealtyController extends Controller
      */
     public function actionDetail(string $url)
     {
-        $model = Realty::find()->with(['city', 'country', 'images', 'deviceServices', 'terms'])->where(['=', 'url', $url])->one();
+        $model = Realty::find()
+            ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
+            ->where(['=', 'url', $url])
+            ->andWhere(['=', 'status_id', Status::STATUS_ACTIVE])
+            ->one();
         if (!$model) {
             throw new NotFoundHttpException();
         }

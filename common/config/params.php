@@ -6,6 +6,8 @@ return [
 
     'mysqlQueriesCache' => 5,
 
+    'pageSize' => 10,
+
     'imageMiniW' => 120,
     'imageMiniH' => 75,
     'imageNormalW' => 270,
