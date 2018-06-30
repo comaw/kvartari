@@ -25,16 +25,33 @@ class RealtyController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['create'],
+                'only' => ['create', 'personal'],
                 'rules' => [
                     [
-                        'actions' => ['create'],
+                        'actions' => ['create', 'personal'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
             ],
         ];
+    }
+
+    public function actionPersonal()
+    {
+        $query = Realty::find()->where(['=', 'user_id', Yii::$app->user->id]);
+        $countQuery = clone $query;
+        $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
+        $models = $query->offset($pages->offset)
+            ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
+            ->limit($pages->limit)
+            ->orderBy('id desc')
+            ->all();
+
+        return $this->render('personal', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);
     }
 
     public function actionList(int $page = 0)
@@ -64,7 +81,8 @@ class RealtyController extends Controller
         $model = Realty::find()
             ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
             ->where(['=', 'url', $url])
-            ->andWhere(['=', 'status_id', Status::STATUS_ACTIVE])
+            ->andWhere("(status_id = :status_id OR user_id = :user_id)",
+                [':status_id' => Status::STATUS_ACTIVE, ':user_id' => Yii::$app->user->id])
             ->one();
         if (!$model) {
             throw new NotFoundHttpException();
@@ -83,19 +101,22 @@ class RealtyController extends Controller
         $model = new Realty(['scenario' => 'create']);
         $model->status_id = 1;
         $model->user_id = Yii::$app->user->id;
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $isNewRecord = $model->isNewRecord;
-            $model->save(false);
+        if ($model->load(Yii::$app->request->post())) {
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            $model->upload($isNewRecord);
+            if ($model->validate()) {
+                $isNewRecord = $model->isNewRecord;
+                $model->save(false);
 
-            $realtyView = new RealtyView();
-            $realtyView->id = $model->id;
-            $realtyView->save();
+                $model->upload($isNewRecord);
 
-            Yii::$app->session->setFlash('success', Yii::t('app', 'Успешно сохранено!'));
+                $realtyView     = new RealtyView();
+                $realtyView->id = $model->id;
+                $realtyView->save();
 
-            return $this->refresh();
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Успешно сохранено!'));
+
+                return $this->redirect(['realty/personal']);
+            }
         }
 
         return $this->render('create', ['model' => $model]);

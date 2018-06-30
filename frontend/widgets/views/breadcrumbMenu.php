@@ -21,7 +21,7 @@ use yii\helpers\Url;
             <a href="/user/orders">Мои аренды</a>
         </li>
         <li>
-            <a href="/realty/clientRealty">Мои квартиры</a>
+            <a href="<?=Url::toRoute(['realty/personal'])?>">Мои квартиры</a>
         </li>
         <li>
             <a href="/realty/calendar">Календарь занятости</a>
