@@ -42,10 +42,6 @@ AppAsset::register($this);
         'property' => 'og:url',
         'content' => Url::canonical()
     ]);
-    $this->registerMetaTag([
-        'property' => 'og:image',
-        'content' => '/img/logo.png'
-    ]);
     ?>
 </head>
 <body>

@@ -7,6 +7,10 @@ $this->registerMetaTag([
     'name' => 'description',
     'content' => Yii::t('app', 'Новые квартиры')
 ]);
+$this->registerMetaTag([
+    'property' => 'og:image',
+    'content' => '/img/logo.png'
+]);
 ?>
 <div class="map-wrapper">
     <div class="map">
@@ -81,7 +85,7 @@ $script = <<< JS
         });
       }
 
-      google.maps.event.addDomListener(window, 'load', initialize(60.0419640, 30.268662));
+      google.maps.event.addDomListener(window, 'load', initialize());
 JS;
 
 $this->registerJsFile('https://maps.googleapis.com/maps/api/js?key=' . Yii::$app->params['mapApiKey'],  ['position' => yii\web\View::POS_HEAD]);

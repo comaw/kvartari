@@ -36,6 +36,21 @@ class RealtyController extends Controller
     }
 
     /**
+     * @param string $url
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionDetail(string $url)
+    {
+        $model = Realty::find()->with(['city', 'country', 'images', 'deviceServices', 'terms'])->where(['=', 'url', $url])->one();
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('detail', ['model' => $model]);
+    }
+
+    /**
      *
      * @return mixed
      * @throws \yii\base\Exception
@@ -45,7 +60,6 @@ class RealtyController extends Controller
         $model = new Realty(['scenario' => 'create']);
         $model->status_id = 1;
         $model->user_id = Yii::$app->user->id;
-//        $model->setServicesIds();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $isNewRecord = $model->isNewRecord;
             $model->save(false);

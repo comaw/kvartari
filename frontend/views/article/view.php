@@ -14,7 +14,10 @@ $this->registerMetaTag([
     'name' => 'description',
     'content' => $model->description ?? $model->name
 ]);
-
+$this->registerMetaTag([
+    'property' => 'og:image',
+    'content' => '/img/logo.png'
+]);
 ?>
 <div class="container">
     <div id="main">
