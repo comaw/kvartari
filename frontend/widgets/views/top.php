@@ -8,6 +8,7 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use frontend\models\SiteSettings;
 
 ?>
 <div id="header-wrapper">
@@ -31,10 +32,10 @@ use yii\helpers\Html;
                             </div>
                             <div class="info">
                                 <div class="site-phone">
-                                    <span>+7 (800) 555-23-27</span>
+                                    <span><?=SiteSettings::getSettings('site_phone')?></span>
                                 </div>
                                 <div class="site-email">
-                                    <a href="mailto:info@kvartari.ru">info@kvartari.ru</a>
+                                    <a href="mailto:<?=SiteSettings::getSettings('site_email')?>"><?=SiteSettings::getSettings('site_email')?></a>
                                 </div>
                             </div>
                             <?=Html::a(Yii::t('app', 'Добавить квартиру'), ['realty/create'], ['class'=>'btn btn-primary btn-large list-your-property arrow-right'])?>

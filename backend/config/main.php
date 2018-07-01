@@ -15,9 +15,17 @@ return [
     'language' => 'ru',
     'charset' => 'UTF-8',
     'timeZone' => 'Europe/Moscow',
-    'name' => \Yii::t('app', 'Admin'),
+    'name' => \Yii::t('app', 'Admin kvartari'),
     'modules' => [],
     'components' => [
+        'cacheFileAdmin' => [
+            'class' => 'yii\caching\FileCache',
+            'cachePath' => '@backend/runtime/cache'
+        ],
+        'cacheFileFront' => [
+            'class' => 'yii\caching\FileCache',
+            'cachePath' => '@frontend/runtime/cache'
+        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
             'enableCsrfValidation' => true,

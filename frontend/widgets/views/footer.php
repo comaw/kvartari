@@ -11,6 +11,7 @@
 use frontend\models\Realty;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use frontend\models\SiteSettings;
 
 ?>
 <div id="footer-wrapper">
@@ -55,16 +56,16 @@ use yii\helpers\Html;
                             <tr>
                                 <th class="address">Адрес:</th>
                                 <td>
-                                    Санкт-Петербург<br>Россия<br>
+                                    <?=SiteSettings::getSettings('site_address')?><br>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="phone">Телефон:</th>
-                                <td>+7 (800) 555-23-27</td>
+                                <td><?=SiteSettings::getSettings('site_phone')?></td>
                             </tr>
                             <tr>
                                 <th class="email">E-mail:</th>
-                                <td><a href="mailto:info@kvartari.ru">info@kvartari.ru</a></td>
+                                <td><a href="mailto:<?=SiteSettings::getSettings('site_email')?>"><?=SiteSettings::getSettings('site_email')?></a></td>
                             </tr>
                             </tbody>
                         </table>

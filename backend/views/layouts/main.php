@@ -19,13 +19,13 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow" />
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title) ?><?= $this->title ? ' - ' : '' ?><?= Html::encode(Yii::$app->name) ?></title>
     <?php $this->head() ?>
 </head>
 <body>
 <?php $this->beginBody() ?>
-
 <div class="wrap">
     <?php
     NavBar::begin([
@@ -36,15 +36,37 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/site/index']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => Yii::t('app','Login'), 'url' => ['/site/login']];
     } else {
+        $menuItems[] = ['label' => Yii::t('app','Users'), 'url' => ['/user/index']];
+        $menuItems[] = ['label' => Yii::t('app', 'Опции объявлений'), 'items' => [
+            ['label' => Yii::t('app', 'Условия аренды'), 'url' => ['/term/index']],
+            ['label' => Yii::t('app', 'Тип помощений'), 'url' => ['/typehousing/index']],
+            ['label' => Yii::t('app', 'Комфорт'), 'url' => ['/deviceservice/index']],
+
+        ]];
+        $menuItems[] = ['label' => Yii::t('app', 'Локализация'), 'items' => [
+            ['label' => Yii::t('app', 'Countries'), 'url' => ['/country/index']],
+            ['label' => Yii::t('app', 'Cities'), 'url' => ['/city/index']],
+
+        ]];
+        $menuItems[] = ['label' => Yii::t('app', 'Услуги'), 'items' => [
+            ['label' => Yii::t('app', 'Дополнительные услуги'), 'url' => ['/service/index']],
+
+        ]];
+        $menuItems[] = ['label' => Yii::t('app', 'Настройки'), 'items' => [
+            ['label' => Yii::t('app', 'Настройки сайта'), 'url' => ['/sitesettings/index']],
+            ['label' => Yii::t('app', 'Валюты сайта'), 'url' => ['/currency/index']],
+            ['label' => Yii::t('app', 'Очистить кэш'), 'url' => ['/clear/cache']],
+
+        ]];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                Yii::t('app', 'Logout ({user})', ['user' => Yii::$app->user->identity->username]),
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()
@@ -65,15 +87,11 @@ AppAsset::register($this);
         <?= $content ?>
     </div>
 </div>
-
 <footer class="footer">
     <div class="container">
         <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
-
 <?php $this->endBody() ?>
 </body>
 </html>
