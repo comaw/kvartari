@@ -20,6 +20,8 @@ use Yii;
  * @property int $updated_at
  *
  * @property Realty[] $realties
+ * @property Reservation[] $reservations
+ * @property UserAddress[] $userAddresses
  */
 class User extends \yii\db\ActiveRecord
 {
@@ -75,5 +77,21 @@ class User extends \yii\db\ActiveRecord
     public function getRealties()
     {
         return $this->hasMany(Realty::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReservations()
+    {
+        return $this->hasMany(Reservation::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserAddresses()
+    {
+        return $this->hasMany(UserAddress::class, ['user_id' => 'id']);
     }
 }

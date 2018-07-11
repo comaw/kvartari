@@ -1,6 +1,9 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\Realty;
+use frontend\models\Reservation;
+use frontend\models\search\RealtySearch;
 use frontend\models\User;
 use Yii;
 use yii\web\Controller;
@@ -31,6 +34,19 @@ class UserController extends Controller
                 ],
             ],
         ];
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function actionRealty()
+    {
+        $models = Reservation::find()->with(['realty'])->where(['=', 'user_id', Yii::$app->user->id])->orderBy('id DESC')->limit(100)->all();
+
+        return $this->render('realty', [
+            'models' => $models
+        ]);
     }
 
     /**

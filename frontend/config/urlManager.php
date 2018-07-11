@@ -26,6 +26,9 @@ return [
         'realty/detail/<url:[\w\d\_\-]+>' => 'realty/detail',
         'realty/list' => 'realty/list',
         'realty/personal' => 'realty/personal',
+        'realty/apply/<reservation:\d+>' => 'realty/apply',
+        'user/realty' => 'user/realty',
+        'realty/additional/<reservation:\d+>' => 'realty/additional',
 
         '<controller:\w+>/<id:\d+>/<action:(create|update|delete)>' => '<controller>/<action>',
         '<controller:\w+>/<action:\w+>' => '<controller>/<action>',

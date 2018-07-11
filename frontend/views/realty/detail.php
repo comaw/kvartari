@@ -12,6 +12,7 @@ use frontend\models\Realty;
 use yii\bootstrap\ActiveForm;
 
 /** @var $model \frontend\models\Realty */
+/** @var $reservation \frontend\widgets\Reservation */
 
 $this->title                   = $model->title;
 $this->params['breadcrumbs'][] = $model->title;
@@ -128,7 +129,7 @@ $this->registerMetaTag([
                         <h2 class="block-title" style="margin:10px 0px">Забронировать</h2>
                     </div>
                     <div class="content" style="<?=!Yii::$app->user->isGuest ? 'height:365px': 'height:275px'?>">
-                        <?=\frontend\widgets\Reservation::widget(['realty' => $model])?>
+                        <?=\frontend\widgets\Reservation::widget(['realty' => $model, 'reservation' => $reservation])?>
                     </div>
                 </div>
                 <?=\frontend\widgets\LastSeeRealty::widget()?>

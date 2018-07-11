@@ -59,6 +59,8 @@ class SignupForm extends Model
 
             [['confirm'], 'compare', 'compareAttribute'=> 'password', 'message'=> Yii::t('app', 'Passwords do not match')],
             [['verifyCode'], \common\recaptcha\ReCaptchaValidator::class, 'secret' => \common\recaptcha\ReCaptcha::SECRET_KEY],
+
+            [['username', 'email', 'phone'], 'filter', 'filter' => 'strip_tags'],
         ];
     }
 

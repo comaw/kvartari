@@ -2,9 +2,14 @@
 namespace frontend\controllers;
 
 use common\lib\Pagination;
+use common\models\User;
 use frontend\models\Realty;
 use frontend\models\RealtyView;
+use frontend\models\Reservation;
+use frontend\models\ReservationAddresses;
+use frontend\models\SignupForm;
 use frontend\models\Status;
+use frontend\models\UserAddress;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -72,6 +77,65 @@ class RealtyController extends Controller
     }
 
     /**
+     * @param int $reservation
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionAdditional(int $reservation)
+    {
+        $reservation = Reservation::find()->where(['=', 'id', $reservation])->andWhere(['=', 'user_id', Yii::$app->user->id])->one();
+        if (!$reservation) {
+            throw new NotFoundHttpException();
+        }
+
+        $model = new ReservationAddresses();
+        $model->reservation_id = Yii::$app->user->id;
+        if ($model->load(Yii::$app->request->post())) {
+            $model->photo = UploadedFile::getInstance($model, 'photo');
+            if ($model->validate()) {
+                $model->save(false);
+                $model->upload();
+                Yii::$app->session->setFlash('success', 'Успешно сохраненно!');
+
+                return $this->refresh();
+            }
+        }
+
+        return $this->render('additional', ['model' => $model, 'reservation' => $reservation]);
+    }
+
+    /**
+     * @param int $reservation
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionApply(int $reservation)
+    {
+        $reservation = Reservation::find()->where(['=', 'id', $reservation])->andWhere(['=', 'user_id', Yii::$app->user->id])->one();
+        if (!$reservation) {
+            throw new NotFoundHttpException();
+        }
+        $model = UserAddress::find()->where(['=', 'user_id', Yii::$app->user->id])->orderBy('id DESC')->one();
+        if (!$model) {
+            $model = new UserAddress();
+            $model->user_id = Yii::$app->user->id;
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            $model->photo = UploadedFile::getInstance($model, 'photo');
+            if ($model->validate()) {
+                $model->save(false);
+                $reservation->address_id = $model->id;
+                $reservation->save();
+                $model->upload();
+
+                return $this->redirect(['/realty/additional', 'reservation' => $reservation->id]);
+            }
+        }
+
+        return $this->render('apply', ['model' => $model]);
+    }
+
+    /**
      * @param string $url
      * @return string
      * @throws NotFoundHttpException
@@ -84,11 +148,46 @@ class RealtyController extends Controller
             ->andWhere("(status_id = :status_id OR user_id = :user_id)",
                 [':status_id' => Status::STATUS_ACTIVE, ':user_id' => Yii::$app->user->id])
             ->one();
+
+
+        $reservation = new \frontend\models\Reservation();
+        $reservation->realty_id = $model->id;
+        $reservation->user_id = 0;
+        $reservation->address_id = 0;
+        $reservation->status = 1;
+        if (!Yii::$app->user->isGuest) {
+            $reservation->user_id = Yii::$app->user->id;
+            $reservation->name = Yii::$app->user->identity->username;
+            $reservation->email = Yii::$app->user->identity->email;
+            $reservation->phone = Yii::$app->user->identity->phone;
+        }
+        if ($reservation->load(Yii::$app->request->post()) && $reservation->validate()) {
+            $user = User::find()
+                ->where(['=', 'phone', $reservation->phone])
+                ->orWhere(['=', 'email', $reservation->email])
+                ->one();
+            if ($user) {
+                $reservation->addError('phone', Yii::t('app', 'Такой телеон или email уже зарегстрированы - войди на сайт'));
+            } else {
+                $user           = new User();
+                $user->username = $reservation->name;
+                $user->email    = $reservation->email;
+                $user->phone    = $reservation->phone;
+                $user->setPassword(rand(999999, 9999999999));
+                $user->generateAuthKey();
+                Yii::$app->getUser()->login($user);
+
+                $reservation->save(false);
+
+                return $this->redirect(['/realty/apply', 'reservation' => $reservation->id]);
+            }
+        }
+
         if (!$model) {
             throw new NotFoundHttpException();
         }
 
-        return $this->render('detail', ['model' => $model]);
+        return $this->render('detail', ['model' => $model, 'reservation' => $reservation]);
     }
 
     /**

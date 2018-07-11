@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `kv_migration` (
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Дамп данных таблицы kvartari.kv_migration: ~19 rows (приблизительно)
+-- Дамп данных таблицы kvartari.kv_migration: ~22 rows (приблизительно)
 /*!40000 ALTER TABLE `kv_migration` DISABLE KEYS */;
 INSERT INTO `kv_migration` (`version`, `apply_time`) VALUES
 	('m000000_000000_base', 1529354389),
@@ -241,7 +241,10 @@ INSERT INTO `kv_migration` (`version`, `apply_time`) VALUES
 	('m180624_152547_create_realty_device_service_table', 1529854489),
 	('m180629_074527_create_site_settings_table', 1530258565),
 	('m180629_075405_create_realty_term_table', 1530259577),
-	('m180708_161630_create_reservation_table', 1531068732);
+	('m180708_161630_create_reservation_table', 1531068732),
+	('m180711_160303_create_user_address_table', 1531325787),
+	('m180711_161126_update_reservation_table', 1531325787),
+	('m180711_185207_create_reservation_addresses_table', 1531335232);
 /*!40000 ALTER TABLE `kv_migration` ENABLE KEYS */;
 
 -- Дамп структуры для таблица kvartari.kv_realty
@@ -460,19 +463,43 @@ CREATE TABLE IF NOT EXISTS `kv_reservation` (
   `arrival_date` date DEFAULT NULL,
   `comment` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `comment_admin` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `realty_id` (`realty_id`),
   KEY `status` (`status`),
   KEY `start` (`date_from`),
   KEY `stop` (`date_to`),
-  CONSTRAINT `fk_rs_realty_id` FOREIGN KEY (`realty_id`) REFERENCES `kv_realty` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_rs_user_id` FOREIGN KEY (`user_id`) REFERENCES `kv_user` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `address_id` (`address_id`),
+  CONSTRAINT `fk_rs_realty_id` FOREIGN KEY (`realty_id`) REFERENCES `kv_realty` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Дамп данных таблицы kvartari.kv_reservation: ~0 rows (приблизительно)
+-- Дамп данных таблицы kvartari.kv_reservation: ~1 rows (приблизительно)
 /*!40000 ALTER TABLE `kv_reservation` DISABLE KEYS */;
+INSERT INTO `kv_reservation` (`id`, `user_id`, `realty_id`, `status`, `phone`, `name`, `email`, `date_from`, `date_to`, `arrival_date`, `comment`, `comment_admin`, `address_id`) VALUES
+	(1, 1, 20, 1, '+7(111)111-11-11', 'coma', 'comaw@i.ua', '2018-07-11', '2018-07-19', NULL, 'fhf', '', 1);
 /*!40000 ALTER TABLE `kv_reservation` ENABLE KEYS */;
+
+-- Дамп структуры для таблица kvartari.kv_reservation_addresses
+CREATE TABLE IF NOT EXISTS `kv_reservation_addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reservation_id` int(11) unsigned NOT NULL,
+  `fio` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `date_birth` date NOT NULL,
+  `place_birth` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `passport_number` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `information` varchar(4000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `reservation_id` (`reservation_id`),
+  CONSTRAINT `fk_ra_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `kv_reservation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Дамп данных таблицы kvartari.kv_reservation_addresses: ~2 rows (приблизительно)
+/*!40000 ALTER TABLE `kv_reservation_addresses` DISABLE KEYS */;
+INSERT INTO `kv_reservation_addresses` (`id`, `reservation_id`, `fio`, `date_birth`, `place_birth`, `passport_number`, `information`) VALUES
+	(1, 1, 'test2', '2018-07-12', 'sdfsdfsdf', 'ewtsdgs', 'test1'),
+	(2, 1, 'test2', '2018-07-12', 'sdfsdfsdf', 'ewtsdgs', 'test1');
+/*!40000 ALTER TABLE `kv_reservation_addresses` ENABLE KEYS */;
 
 -- Дамп структуры для таблица kvartari.kv_service
 CREATE TABLE IF NOT EXISTS `kv_service` (
@@ -591,12 +618,35 @@ INSERT INTO `kv_user` (`id`, `username`, `phone`, `role`, `auth_key`, `password_
 	(1, 'coma', '+7(111)111-11-11', 'admin', 'Vlc23qFyum8hVs-Wg4P6sVcsvS5cHmv7', '$2y$13$dLTUAWbNGtgpz/B2GfJvf.h9mpEbFQdYC5WpCS21MPfHGTBXcjhju', NULL, 'comaw@i.ua', 10, 1529834989, 1529840319);
 /*!40000 ALTER TABLE `kv_user` ENABLE KEYS */;
 
+-- Дамп структуры для таблица kvartari.kv_user_address
+CREATE TABLE IF NOT EXISTS `kv_user_address` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL,
+  `type` int(1) unsigned NOT NULL DEFAULT 1,
+  `fio` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `date_birth` date NOT NULL,
+  `place_birth` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `passport_number` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `information` varchar(4000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `type` (`type`),
+  CONSTRAINT `fk_ua_user_id` FOREIGN KEY (`user_id`) REFERENCES `kv_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Дамп данных таблицы kvartari.kv_user_address: ~1 rows (приблизительно)
+/*!40000 ALTER TABLE `kv_user_address` DISABLE KEYS */;
+INSERT INTO `kv_user_address` (`id`, `user_id`, `type`, `fio`, `date_birth`, `place_birth`, `passport_number`, `information`) VALUES
+	(1, 1, 1, 'Сергей', '2018-07-12', 'ываы ываыа', 'пвапываыва', 'ывппа');
+/*!40000 ALTER TABLE `kv_user_address` ENABLE KEYS */;
+
 -- Дамп структуры для таблица kvartari.test
 CREATE TABLE IF NOT EXISTS `test` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `role` set('tenant','owner','admin') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'tenant',
   `data` longblob DEFAULT NULL,
   `t` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `address_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

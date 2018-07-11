@@ -33,7 +33,6 @@ class m180708_161630_create_reservation_table extends Migration
         $this->createIndex('start', '{{%reservation}}', 'start');
         $this->createIndex('stop', '{{%reservation}}', 'stop');
 
-        $this->addForeignKey('fk_rs_user_id', '{{%reservation}}', 'user_id', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
         $this->addForeignKey('fk_rs_realty_id', '{{%reservation}}', 'realty_id', '{{%realty}}', 'id', 'RESTRICT', 'CASCADE');
     }
 

@@ -19,9 +19,10 @@ use Yii;
  * @property string $arrival_date
  * @property string $comment
  * @property string $comment_admin
+ * @property string $address_id
  *
  * @property Realty $realty
- * @property User $user
+ * @property ReservationAddresses[] $reservationAddresses
  */
 class Reservation extends \yii\db\ActiveRecord
 {
@@ -39,13 +40,12 @@ class Reservation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'realty_id', 'status', 'phone', 'name', 'email'], 'required'],
-            [['user_id', 'realty_id', 'status'], 'integer'],
+            [['user_id', 'realty_id', 'status', 'phone', 'name', 'email', 'address_id'], 'required'],
+            [['user_id', 'realty_id', 'status', 'address_id'], 'integer'],
             [['date_from', 'date_to', 'arrival_date'], 'safe'],
             [['comment', 'comment_admin'], 'string'],
             [['phone', 'name', 'email'], 'string', 'max' => 255],
             [['realty_id'], 'exist', 'skipOnError' => true, 'targetClass' => Realty::class, 'targetAttribute' => ['realty_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -67,6 +67,7 @@ class Reservation extends \yii\db\ActiveRecord
             'arrival_date' => Yii::t('app', 'Arrival Date'),
             'comment' => Yii::t('app', 'Comment'),
             'comment_admin' => Yii::t('app', 'Comment Admin'),
+            'address_id' => Yii::t('app', 'Address ID'),
         ];
     }
 
@@ -81,8 +82,8 @@ class Reservation extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getReservationAddresses()
     {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
+        return $this->hasMany(ReservationAddresses::class, ['reservation_id' => 'id']);
     }
 }

@@ -18,13 +18,13 @@ use yii\helpers\Url;
         <?php } ?>
 		<?php if (!Yii::$app->user->isGuest) { ?>
         <li>
-            <a href="/user/orders">Мои аренды</a>
+            <a href="<?=Url::toRoute(['user/realty'])?>" title="Мои аренды">Мои аренды</a>
         </li>
         <li>
-            <a href="<?=Url::toRoute(['realty/personal'])?>">Мои квартиры</a>
+            <a href="<?=Url::toRoute(['realty/personal'])?>" title="Мои квартиры">Мои квартиры</a>
         </li>
         <li>
-            <a href="/realty/calendar">Календарь занятости</a>
+            <a href="<?=Url::toRoute(['realty/calendar'])?>" title="Календарь занятости">Календарь занятости</a>
         </li>
         <li>
             <a href="<?=Url::toRoute(['user/profile'])?>" title="Профиль">Профиль</a>

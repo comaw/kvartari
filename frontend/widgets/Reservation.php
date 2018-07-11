@@ -18,10 +18,12 @@ use Yii;
  * @package frontend\widgets
  *
  * @property Realty $realty
+ * @property Reservation $reservation
  */
 class Reservation extends Widget
 {
     public $realty;
+    public $reservation;
 
     public function init()
     {
@@ -33,14 +35,6 @@ class Reservation extends Widget
      */
     public function run()
     {
-        $model = new \frontend\models\Reservation();
-        $model->realty_id = $this->realty->id;
-        if (!Yii::$app->user->isGuest) {
-            $model->name = Yii::$app->user->identity->username;
-            $model->email = Yii::$app->user->identity->email;
-            $model->phone = Yii::$app->user->identity->phone;
-        }
-
-        return $this->render('reservation', ['model' => $model, 'realty' => $this->realty]);
+        return $this->render('reservation', ['model' => $this->reservation, 'realty' => $this->realty]);
     }
 }
