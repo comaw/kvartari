@@ -45,6 +45,12 @@ $this->registerMetaTag([
                                                 </div>
                                                 <div class="electrolock-text-cont">Доступ <br>за минуту!</div>
                                             </div>
+                                            <div class="electrolock-cont" style="<?=isset($model->reservation->id) ? '' : 'display:none;'?>">
+                                                <div class="electrolock-img-cont">
+
+                                                </div>
+                                                <div class="electrolock-text-cont">Сегодня<br>занято</div>
+                                            </div>
                                             <?=Html::a('', ['realty/detail', 'url' => $model->url], ['title' => Html::encode($model->street)]) ?>
                                             <img src="<?=$model->images[0]->getPhotoPath(Realty::IMAGE_NORMAL)?>" alt="<?=Html::encode($model->title)?>" style="width:270px; height:180px">
                                         </div>

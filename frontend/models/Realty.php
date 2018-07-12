@@ -26,6 +26,7 @@ use Yii;
  * @property array $serviceDeviceIds
  * @property array $termIds
  * @property UploadedFile[] $imageFiles
+ * @property Reservation $reservation
  */
 class Realty extends \common\models\Realty
 {
@@ -194,6 +195,19 @@ class Realty extends \common\models\Realty
         return ArrayHelper::merge(parent::attributeLabels(), [
             'imageFiles' => Yii::t('app', 'Фотографии')
         ]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReservation()
+    {
+        return $this->hasOne(Reservation::class, ['realty_id' => 'id'])
+            ->where(['<=', 'status', 2])
+            ->andWhere("date_from <= :dater OR date_to <= :dater", [
+                ':dater' => date("Y-m-d")
+            ])
+            ->orderBy('id DESC');
     }
 
     /**

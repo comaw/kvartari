@@ -68,9 +68,9 @@ class RealtyController extends Controller
      */
     public function actionList(string $filter = '', int $page = 0)
     {
-        $query = Realty::find()->with(['images', 'status', 'country', 'city'])->where(['=', 'status_id', Status::STATUS_ACTIVE]);
+        $query = Realty::find()->with(['reservation', 'images', 'status', 'country', 'city'])->where(['=', 'status_id', Status::STATUS_ACTIVE]);
         $query->leftJoin("{{%reservation}}", "{{%reservation}}.realty_id = {{%realty}}.id");
-        $query->andWhere("({{%reservation}}.date_from <= :current_date AND {{%reservation}}.date_from >= :current_date) OR {{%reservation}}.date_from IS NULL", [':current_date' => date("Y-m-d")]);
+        //$query->andWhere("({{%reservation}}.date_from <= :current_date AND {{%reservation}}.date_from >= :current_date) OR {{%reservation}}.date_from IS NULL", [':current_date' => date("Y-m-d")]);
         $countQuery = clone $query;
         $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
         $query->offset($pages->offset)
@@ -94,6 +94,7 @@ class RealtyController extends Controller
                 throw new NotFoundHttpException();
         }
         $models = $query->all();
+
         return $this->render('list', [
             'models' => $models,
             'pages' => $pages,
