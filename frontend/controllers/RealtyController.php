@@ -171,6 +171,10 @@ class RealtyController extends Controller
                 [':status_id' => Status::STATUS_ACTIVE, ':user_id' => Yii::$app->user->id])
             ->one();
 
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
         $model->realtyView->updateCounters(['views' => 1]);
 
         $reservation = new \frontend\models\Reservation();
@@ -185,33 +189,44 @@ class RealtyController extends Controller
             $reservation->phone = Yii::$app->user->identity->phone;
         }
         if ($reservation->load(Yii::$app->request->post()) && $reservation->validate()) {
-            $user = User::find()
-                ->where(['=', 'phone', $reservation->phone])
-                ->orWhere(['=', 'email', $reservation->email])
-                ->one();
-            if ($user &&  Yii::$app->user->id != $user->id) {
-                $reservation->addError('phone', Yii::t('app', 'Такой телеон или email уже зарегстрированы - войди на сайт'));
-            } elseif(!$user) {
-                $user           = new User();
-                $user->username = $reservation->name;
-                $user->email    = $reservation->email;
-                $user->phone    = $reservation->phone;
-                $user->setPassword(rand(999999, 9999999));
-                $user->generateAuthKey();
-                $user->save();
-                Yii::$app->getUser()->login($user);
-            }
-            if (Yii::$app->user->id == $user->id) {
-                $reservation->user_id = Yii::$app->user->id;
-                $reservation->save(false);
+            $reservationCurrent = Reservation::find()->where("realty_id = :realty_id AND status <= :status AND date_from >= :date_from AND date_to <= :date_to", [
+                ':realty_id' => $model->id,
+                ':status' => 2,
+                ':date_from' => $reservation->date_from,
+                ':date_to' => $reservation->date_to,
+            ])->one();
+            if ($reservationCurrent) {
+                $reservation->addError('date_from', Yii::t('app', 'Квартира уже занята на этот период! Выберите другой период.'));
+            } else {
+                $user = User::find()->where(['=', 'phone', $reservation->phone])->orWhere([
+                        '=',
+                        'email',
+                        $reservation->email
+                    ])->one();
+                if ($user && Yii::$app->user->id != $user->id) {
+                    $reservation->addError('phone', Yii::t('app', 'Такой телеон или email уже зарегстрированы - войди на сайт'));
+                } elseif (!$user) {
+                    $user = new User();
+                    $user->username = $reservation->name;
+                    $user->email = $reservation->email;
+                    $user->phone = $reservation->phone;
+                    $user->setPassword(rand(999999, 9999999));
+                    $user->generateAuthKey();
+                    if ($user->validate()) {
+                        $user->save(false);
+                        Yii::$app->getUser()->login($user);
+                    } else {
+                        $reservation->addError('date_from', join('', $user->getErrors()));
+                    }
+                }
+                if (Yii::$app->user->id == $user->id) {
+                    $reservation->user_id = Yii::$app->user->id;
+                    $reservation->save(false);
 
-                return $this->redirect(['/realty/apply', 'reservation' => $reservation->id]);
+                    return $this->redirect(['/realty/apply', 'reservation' => $reservation->id]);
+                }
+                $reservation->addError('date_from', Yii::t('app', 'Не удалось оформить, залогинтесь пожалуста'));
             }
-            $reservation->addError('date_from', Yii::t('app', 'Не удалось оформить, залогинтесь пожалуста'));
-        }
-
-        if (!$model) {
-            throw new NotFoundHttpException();
         }
 
         return $this->render('detail', ['model' => $model, 'reservation' => $reservation]);
