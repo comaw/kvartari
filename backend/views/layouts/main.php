@@ -42,6 +42,11 @@ AppAsset::register($this);
         $menuItems[] = ['label' => Yii::t('app','Login'), 'url' => ['/site/login']];
     } else {
         $menuItems[] = ['label' => Yii::t('app','Users'), 'url' => ['/user/index']];
+        $menuItems[] = ['label' => Yii::t('app', 'Квартиры'), 'items' => [
+            ['label' => Yii::t('app', 'Квартиры'), 'url' => ['/realty/index']],
+            ['label' => Yii::t('app', 'Резервирвоание'), 'url' => ['/reservation/index']],
+
+        ]];
         $menuItems[] = ['label' => Yii::t('app', 'Опции объявлений'), 'items' => [
             ['label' => Yii::t('app', 'Условия аренды'), 'url' => ['/term/index']],
             ['label' => Yii::t('app', 'Тип помощений'), 'url' => ['/typehousing/index']],

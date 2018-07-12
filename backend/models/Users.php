@@ -8,6 +8,9 @@
 
 namespace backend\models;
 
+use phpDocumentor\Reflection\Types\Static_;
+use yii\helpers\ArrayHelper;
+
 /**
  * Class Users
  * @package backend\models
@@ -15,4 +18,11 @@ namespace backend\models;
 class Users extends \common\models\Users
 {
 
+    /**
+     * @return array
+     */
+    public static function getDropDown(): array
+    {
+        return ArrayHelper::map(static::find()->select(['id', 'username'])->orderBy('username')->all(), 'id', 'username');
+    }
 }

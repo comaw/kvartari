@@ -14,5 +14,11 @@ namespace backend\models;
  */
 class Realty extends \common\models\Realty
 {
-
+    /**
+     * @return bool
+     */
+    public function beforeValidate()
+    {
+        return true;
+    }
 }

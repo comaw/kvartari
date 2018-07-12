@@ -1,6 +1,8 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\Realty;
+use backend\models\Reservation;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -60,7 +62,17 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $countRealty['new'] = Realty::find()->where(['=', 'status_id', 1])->count();
+        $countRealty['active'] = Realty::find()->where(['=', 'status_id', 2])->count();
+        $countRealty['cancel'] = Realty::find()->where(['=', 'status_id', 3])->count();
+        $countRealty['ban'] = Realty::find()->where(['=', 'status_id', 4])->count();
+
+        $countReservation['new'] = Reservation::find()->where(['=', 'status', 1])->count();
+        $countReservation['active'] = Reservation::find()->where(['=', 'status', 2])->count();
+        $countReservation['cancel'] = Reservation::find()->where(['=', 'status', 3])->count();
+        $countReservation['close'] = Reservation::find()->where(['=', 'status', 4])->count();
+
+        return $this->render('index', ['countRealty' => $countRealty, 'countReservation' => $countReservation]);
     }
 
     /**
