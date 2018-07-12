@@ -6,95 +6,62 @@
  * Time: 12:50
  */
 
+use frontend\models\Country;
+use frontend\models\City;
+use frontend\models\TypeHousing;
+use frontend\models\FormSearch;
+use yii\bootstrap\ActiveForm;
+use yii\bootstrap\Html;
+use yii\helpers\Url;
+
+/** @var $model \frontend\models\FormSearch */
 
 ?>
 <div class="container">
     <div class="row">
-        <div class="span3"  style="margin-top:-335px">
+        <div class="span3" style="margin-top:-335px">
             <div class="property-filter pull-right">
                 <div class="content">
-                    <form method="get" action="?">
+                    <?php $form = ActiveForm::begin([
+                        'id' => 'search-home-form',
+                        'method' => 'get',
+                        'action' => Url::toRoute(['realty/search'])
+                    ]); ?>
                         <div class="location control-group" style="margin-bottom:18px">
                             <div class="controls">
-                                <select id="inputLocation">
-                                    <option id="malibu">Россия, Санкт-Петербург</option>
-                                </select>
-                            </div><!-- /.controls -->
-                        </div><!-- /.control-group -->
-
+                                <?= $form->field($model, 'country')->dropDownList(Country::getDropDown())->label('') ?>
+                            </div>
+                        </div>
+                        <div class="type control-group" style="margin-bottom:18px">
+                            <div class="controls">
+                                <?= $form->field($model, 'city')->dropDownList(City::getDropDown())->label('') ?>
+                            </div>
+                        </div>
                         <div class="type control-group">
                             <div class="controls">
-                                <select id="inputType">
-                                    <option id="apartment">Квартира</option>
-                                    <option id="condo">Дом</option>
-                                </select>
-                            </div><!-- /.controls -->
-                        </div><!-- /.control-group -->
+                                <?= $form->field($model, 'type_housing_id')->dropDownList(TypeHousing::getDropDown())->label('') ?>
+                             </div>
+                        </div>
 
-                        <div class="beds control-group">
-                            <label class="control-label" for="inputBeds"> Кровати </label>
+                        <div class="type control-group">
+                            <label class="control-label" for="inputBeds"> Цена от </label>
                             <div class="controls">
-                                <select id="inputBeds">
-                                    <option id="11">1</option>
-                                    <option id="21">2</option>
-                                </select>
-                            </div><!-- /.controls -->
-                        </div><!-- /.control-group -->
-
-                        <div class="baths control-group">
-                            <label class="control-label" for="inputBaths"> Ванные </label>
-                            <div class="controls">
-                                <select id="inputBaths">
-                                    <option id="1">1</option>
-                                    <option id="2">2</option>
-                                </select>
-                            </div><!-- /.controls -->
-                        </div><!-- /.control-group -->
-
-                        <div class="rent control-group">
-                            <div class="controls">
-                                <label class="checkbox" for="inputRent">
-                                    <input type="checkbox" id="inputRent">
-                                    Интернет </label>
-                            </div><!-- /.controls -->
-                        </div><!-- /.control-group -->
-
-                        <div class="sale control-group">
-                            <div class="controls">
-                                <label class="checkbox" for="inputSale">
-                                    <input type="checkbox" id="inputSale">
-                                    Кухня </label>
-                            </div><!-- /.controls -->
-                        </div><!-- /.control-group -->
-
-                        <!--<div class="price-from control-group">
-                            <label class="control-label" for="inputPriceFrom"> Цена от </label>
-                            <div class="controls">
-                                <input type="text" id="inputPriceFrom" name="inputPriceFrom">
+                                <?= $form->field($model, 'price_from')->textInput()->label('') ?>
                             </div>
                         </div>
-
-                        <div class="price-to control-group">
-                            <label class="control-label" for="inputPriceTo"> Цена до </label>
+                        <div class="type control-group">
+                            <label class="control-label" for="inputBeds"> Цена до </label>
                             <div class="controls">
-                                <input type="text" id="inputPriceTo" name="inputPriceTo">
+                                <?= $form->field($model, 'price_to')->textInput()->label('') ?>
                             </div>
                         </div>
-
-                        <div class="price-value">
-                            <span class="from"></span>
-                            -
-                            <span class="to"></span>
-                        </div>
-
-                        <div class="price-slider"></div> -->
 
                         <div class="form-actions">
-                            <a href="/realty/filterList/all"  class="btn btn-primary btn-large" style="width:195px"> Найти! </a>
-                        </div><!-- /.form-actions -->
-                    </form>
-                </div><!-- /.content -->
-            </div><!-- /.property-filter -->
-        </div><!-- /.span3 -->
-    </div><!-- /.row -->
-</div><!-- /.container -->
+                            <?= Html::submitButton(Yii::t('app', ' Найти! '), ['class' => 'btn btn-primary btn-large']) ?>
+                        </div>
+                    <?php ActiveForm::end(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

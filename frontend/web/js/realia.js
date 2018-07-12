@@ -178,24 +178,24 @@ function InitPriceSlider() {
     //jQuery('.price-value .from').currency({ region: 'EUR', thousands: ' ', decimal: ',', decimals: 0 });
 
     jQuery('.price-value .to').text('45 000 руб');
-    //jQuery('.price-value .to').currency({ region: 'EUR', thousands: ' ', decimal: ',', decimals: 0 });
+    jQuery('.price-value .to').currency({ region: 'EUR', thousands: ' ', decimal: ',', decimals: 0 });
 
     $('.property-filter .price-slider').slider({
         range: true,
-        min: 100,
+        min: 1000,
         max: 1000000,
-        values: [100, 1000000],
+        values: [1000, 1000000],
         slide: function(event, ui) {
             jQuery('.property-filter .price-from input').attr('value', ui.values[0]);
             jQuery('.property-filter .price-to input').attr('value', ui.values[1]);
 
             jQuery('.price-value .from').text(ui.values[0]);
-            jQuery('.price-value .from').currency({ region: 'EUR', thousands: ' ', decimal: ',', decimals: 0 });
+            jQuery('.price-value .from').currency({ region: 'GBP', thousands: ' ', decimal: ',', decimals: 0 });
 
             jQuery('.price-value .to').text(ui.values[1]);
-            jQuery('.price-value .to').currency({ region: 'EUR', thousands: ' ', decimal: ',', decimals: 0 });
+            jQuery('.price-value .to').currency({ region: 'GBP', thousands: ' ', decimal: ',', decimals: 0 });
         }
-    });
+    // });
 }
 
 function InitEzmark() {

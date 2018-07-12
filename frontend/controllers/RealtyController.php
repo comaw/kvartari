@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use common\lib\Pagination;
 use common\models\User;
+use frontend\models\FormSearch;
 use frontend\models\Realty;
 use frontend\models\RealtyView;
 use frontend\models\Reservation;
@@ -59,6 +60,40 @@ class RealtyController extends Controller
         ]);
     }
 
+    public function actionSearch(int $page = 0)
+    {
+        $formSearch = new FormSearch();
+        $query = Realty::find()->with(['reservation', 'images', 'status', 'country', 'city'])->where(['=', 'status_id', Status::STATUS_ACTIVE]);
+        if ($formSearch->load(Yii::$app->request->get()) && $formSearch->validate()) {
+            $query->andWhere(['=', 'country_id', $formSearch->country]);
+            if ($formSearch->city) {
+                $query->andWhere(['=', 'city_id', $formSearch->city]);
+            }
+            if ($formSearch->type_housing_id) {
+                $query->andWhere(['=', 'type_housing_id', $formSearch->type_housing_id]);
+            }
+            if ($formSearch->price_from) {
+                $query->andWhere(['>=', 'price', $formSearch->price_from]);
+            }
+            if ($formSearch->price_to) {
+                $query->andWhere(['<=', 'price', $formSearch->price_to]);
+            }
+        }
+        $query->leftJoin("{{%reservation}}", "{{%reservation}}.realty_id = {{%realty}}.id");
+        $countQuery = clone $query;
+        $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
+        $query->offset($pages->offset)
+            ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
+            ->limit($pages->limit);
+
+        $models = $query->all();
+
+        return $this->render('list', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);
+    }
+
     /**
      * @param string $filter
      * @param int $page
@@ -70,7 +105,7 @@ class RealtyController extends Controller
     {
         $query = Realty::find()->with(['reservation', 'images', 'status', 'country', 'city'])->where(['=', 'status_id', Status::STATUS_ACTIVE]);
         $query->leftJoin("{{%reservation}}", "{{%reservation}}.realty_id = {{%realty}}.id");
-        //$query->andWhere("({{%reservation}}.date_from <= :current_date AND {{%reservation}}.date_from >= :current_date) OR {{%reservation}}.date_from IS NULL", [':current_date' => date("Y-m-d")]);
+
         $countQuery = clone $query;
         $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
         $query->offset($pages->offset)

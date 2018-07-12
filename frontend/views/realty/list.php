@@ -95,6 +95,9 @@ $this->registerMetaTag([
                 </div>
             </div>
             <div class="sidebar span3">
+                <div style="margin: 360px 0 0 0 !important;">
+                    <?=\frontend\widgets\HomeFormSearch::widget()?>
+                </div>
                 <?=\frontend\widgets\Managers::widget()?>
             </div>
         </div>

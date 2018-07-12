@@ -8,6 +8,7 @@
 
 namespace frontend\widgets;
 
+use frontend\models\FormSearch;
 use yii\base\Widget;
 use yii\helpers\Html;
 use Yii;
@@ -28,6 +29,9 @@ class HomeFormSearch extends Widget
      */
     public function run()
     {
-        return $this->render('homeFormSearch', []);
+        $model = new FormSearch();
+        $model->load(Yii::$app->request->get());
+
+        return $this->render('homeFormSearch', ['model' => $model]);
     }
 }
