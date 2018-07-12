@@ -24,6 +24,7 @@ return [
         'realty/create' => 'realty/create',
         'articles/<url:[\w\d\_\-]+>' => 'article/view',
         'realty/detail/<url:[\w\d\_\-]+>' => 'realty/detail',
+        'realty/list/<filter:\w+>' => 'realty/list',
         'realty/list' => 'realty/list',
         'realty/personal' => 'realty/personal',
         'realty/apply/<reservation:\d+>' => 'realty/apply',

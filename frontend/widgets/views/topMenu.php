@@ -21,13 +21,16 @@ use yii\helpers\Url;
                         <span class="menuparent nolink">Аренда</span>
                         <ul>
                             <li>
-                                <a href="<?=Url::toRoute(['realty/list'])?>">Доступ за 1 минуту</a>
+                                <a href="<?=Url::toRoute(['realty/list'])?>" title="Новые предложения">Новые предложения</a>
                             </li>
                             <li>
-                                <a href="<?=Url::toRoute(['realty/list'])?>">Квартиры до 2000руб/сутки</a>
+                                <a href="<?=Url::toRoute(['realty/list', 'filter' => 'popular'])?>" title="Популярные">Популярные</a>
                             </li>
                             <li>
-                                <a href="<?=Url::toRoute(['realty/list'])?>">Только рядом с метро</a>
+                                <a href="<?=Url::toRoute(['realty/list', 'filter' => 'cheap'])?>" title="От дешевых к дорогим">От дешевых к дорогим</a>
+                            </li>
+                            <li>
+                                <a href="<?=Url::toRoute(['realty/list', 'filter' => 'expensive'])?>" title="От дорогих к дешевым">От дорогих к дешевым</a>
                             </li>
                         </ul>
                     </li>

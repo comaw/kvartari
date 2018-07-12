@@ -59,17 +59,39 @@ class RealtyController extends Controller
         ]);
     }
 
-    public function actionList(int $page = 0)
+    /**
+     * @param string $filter
+     * @param int $page
+     *
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionList(string $filter = '', int $page = 0)
     {
-        $query = Realty::find()->where(['=', 'status_id', Status::STATUS_ACTIVE]);
+        $query = Realty::find()->with(['images', 'status', 'country', 'city'])->where(['=', 'status_id', Status::STATUS_ACTIVE]);
         $countQuery = clone $query;
         $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
-        $models = $query->offset($pages->offset)
+        $query->offset($pages->offset)
             ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
-            ->limit($pages->limit)
-            ->orderBy('id desc')
-            ->all();
-
+            ->limit($pages->limit);
+        switch ($filter) {
+            case 'popular':
+                $query->joinWith(['realtyView']);
+                $query->orderBy('views DESC');
+                break;
+            case 'cheap':
+                $query->orderBy('price ASC');
+                break;
+            case 'expensive':
+                $query->orderBy('price DESC');
+                break;
+            case '':
+                $query->orderBy('id DESC');
+                break;
+            default:
+                throw new NotFoundHttpException();
+        }
+        $models = $query->all();
         return $this->render('list', [
             'models' => $models,
             'pages' => $pages,
@@ -149,6 +171,7 @@ class RealtyController extends Controller
                 [':status_id' => Status::STATUS_ACTIVE, ':user_id' => Yii::$app->user->id])
             ->one();
 
+        $model->realtyView->updateCounters(['views' => 1]);
 
         $reservation = new \frontend\models\Reservation();
         $reservation->realty_id = $model->id;
