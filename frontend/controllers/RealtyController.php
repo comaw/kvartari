@@ -60,6 +60,11 @@ class RealtyController extends Controller
         ]);
     }
 
+    /**
+     * @param int $page
+     *
+     * @return string
+     */
     public function actionSearch(int $page = 0)
     {
         $formSearch = new FormSearch();
@@ -84,7 +89,8 @@ class RealtyController extends Controller
         $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
         $query->offset($pages->offset)
             ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
-            ->limit($pages->limit);
+            ->limit($pages->limit)
+            ->orderBy('');
 
         $models = $query->all();
 
