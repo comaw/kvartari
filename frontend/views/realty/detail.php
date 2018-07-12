@@ -128,7 +128,7 @@ $this->registerMetaTag([
                     <div class="title">
                         <h2 class="block-title" style="margin:10px 0px">Забронировать</h2>
                     </div>
-                    <div class="content" style="<?=!Yii::$app->user->isGuest ? 'height:365px': 'height:275px'?>">
+                    <div class="content" style="<?=Yii::$app->user->isGuest ? 'height:365px': 'height:275px'?>">
                         <?=\frontend\widgets\Reservation::widget(['realty' => $model, 'reservation' => $reservation])?>
                     </div>
                 </div>

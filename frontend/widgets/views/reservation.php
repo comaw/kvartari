@@ -47,7 +47,7 @@ use kartik\date\DatePicker;
     </div>
 </div>
 <hr style="margin:4px 0;">
-<?php if(!Yii::$app->user->isGuest):?>
+<?php if(Yii::$app->user->isGuest):?>
     <div class="control-group">
         <div class="controls">
             <?= $form->field($model, 'phone')->textInput(['class' => 'control-label', 'placeholder' => $model->getAttributeLabel('phone')])->label('')->widget(MaskedInput::class,[
@@ -58,7 +58,7 @@ use kartik\date\DatePicker;
     </div>
     <div class="control-group">
         <div class="controls">
-            <?= $form->field($model, 'name')->textInput(['class' => 'control-label', 'placeholder' => $model->getAttributeLabel('name')])->label('') ?>
+            <?= $form->field($model, 'name')->textInput(['class' => 'control-label', 'placeholder' => Yii::t('app', 'Fio')])->label('') ?>
         </div>
     </div>
     <div class="control-group">

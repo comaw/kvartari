@@ -166,21 +166,24 @@ class RealtyController extends Controller
                 ->where(['=', 'phone', $reservation->phone])
                 ->orWhere(['=', 'email', $reservation->email])
                 ->one();
-            if ($user) {
+            if ($user &&  Yii::$app->user->id != $user->id) {
                 $reservation->addError('phone', Yii::t('app', 'Такой телеон или email уже зарегстрированы - войди на сайт'));
-            } else {
+            } elseif(!$user) {
                 $user           = new User();
                 $user->username = $reservation->name;
                 $user->email    = $reservation->email;
                 $user->phone    = $reservation->phone;
-                $user->setPassword(rand(999999, 9999999999));
+                $user->setPassword(rand(999999, 9999999));
                 $user->generateAuthKey();
+                $user->save();
                 Yii::$app->getUser()->login($user);
-
+            }
+            if (Yii::$app->user->id == $user->id) {
                 $reservation->save(false);
 
                 return $this->redirect(['/realty/apply', 'reservation' => $reservation->id]);
             }
+            $reservation->addError('date_from', Yii::t('app', 'Не удалось оформить, залогинтесь пожалуста'));
         }
 
         if (!$model) {
