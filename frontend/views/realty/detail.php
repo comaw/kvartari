@@ -112,11 +112,11 @@ $this->registerMetaTag([
                         </ul>
                     </div>
                     <?php if ($reservations) { ?>
-                    <h2>Зарезервирвоанные периоды:</h2>
+                    <h2>Зарезервированные периоды:</h2>
                     <div class="row">
                         <ul class="span10">
                             <?php if (Yii::$app->user->isGuest) { ?>
-                                <p>Только зарегистрированные пользватели могут видеть зарезервирвоаные периоды</p>
+                                <p>Только зарегистрированные пользователи могут видеть зарезервированные периоды</p>
                             <?php } else { ?>
                                 <?php foreach($reservations as $k => $reserv){ ?>
                                     <li style="display:block; width:200px">
