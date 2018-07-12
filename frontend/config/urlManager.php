@@ -29,6 +29,7 @@ return [
         'realty/apply/<reservation:\d+>' => 'realty/apply',
         'user/realty' => 'user/realty',
         'realty/additional/<reservation:\d+>' => 'realty/additional',
+        'user/decline/<reservation:\d+>' => 'user/decline',
 
         '<controller:\w+>/<id:\d+>/<action:(create|update|delete)>' => '<controller>/<action>',
         '<controller:\w+>/<action:\w+>' => '<controller>/<action>',

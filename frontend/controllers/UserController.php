@@ -37,6 +37,23 @@ class UserController extends Controller
     }
 
     /**
+     * @param int $reservation
+     *
+     * @return \yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDecline(int $reservation)
+    {
+        $model = Reservation::find()->where(['=', 'user_id', Yii::$app->user->id])->andWhere(['=', 'id', $reservation])->andWhere(['=', 'status', 1])->one();
+        if ($model) {
+            $model->delete();
+        }
+
+        return $this->redirect(['user/realty']);
+    }
+
+    /**
      *
      * @return mixed
      */

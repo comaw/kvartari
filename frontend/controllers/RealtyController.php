@@ -179,6 +179,7 @@ class RealtyController extends Controller
                 Yii::$app->getUser()->login($user);
             }
             if (Yii::$app->user->id == $user->id) {
+                $reservation->user_id = Yii::$app->user->id;
                 $reservation->save(false);
 
                 return $this->redirect(['/realty/apply', 'reservation' => $reservation->id]);

@@ -7,6 +7,7 @@
  */
 
 use frontend\models\Reservation;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $models[] \frontend\models\Realty */
@@ -52,7 +53,11 @@ $this->registerMetaTag([
                                     <td><?=$model->realty->apartment?></td>
                                     <td><?=Yii::$app->formatter->asDecimal($model->realty->price)?> руб.</td>
                                     <td><?=Yii::$app->formatter->asDecimal($model->realty->pledge)?> руб.</td>
-                                    <td></td>
+                                    <td>
+                                        <?php if ($model->status == 1) { ?>
+                                            <a href="<?=Url::toRoute(['/user/decline', 'reservation' => $model->id])?>" title="Отменить" onclick="return confirm('Вы уверены, что хотите отменить?');">Отменить</a>
+                                        <?php } ?>
+                                    </td>
                                 </tr>
                             <?php } ?>
                             </tbody>
