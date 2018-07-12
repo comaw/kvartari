@@ -13,6 +13,8 @@ use yii\bootstrap\ActiveForm;
 
 /** @var $model \frontend\models\Realty */
 /** @var $reservation \frontend\widgets\Reservation */
+/** @var $reserv \frontend\widgets\Reservation */
+/** @var $reservations[] \frontend\widgets\Reservation */
 
 $this->title                   = $model->title;
 $this->params['breadcrumbs'][] = $model->title;
@@ -37,7 +39,12 @@ $this->registerMetaTag([
                         </div>
                         <div class="electrolock-text-cont" style="text-align:center;margin-left:8px">Доступ в квартиру за 1 мин!<br>По паролю в SMS</div>
                     </div>
+                    <div class="electrolock-cont" style="<?=isset($model->reservation->id) ? '' : 'display:none;'?>">
+                        <div class="electrolock-img-cont">
 
+                        </div>
+                        <div class="electrolock-text-cont">Сегодня<br>занято</div>
+                    </div>
                     <div class="preview" style="height:350px;position:relative;z-index:4;">
                         <div class="price-cont">
                             <div class="price-text-cont" style="text-align:center;margin-left:8px">
@@ -104,6 +111,22 @@ $this->registerMetaTag([
                             <?php } ?>
                         </ul>
                     </div>
+                    <?php if ($reservations) { ?>
+                    <h2>Зарезервирвоанные периоды:</h2>
+                    <div class="row">
+                        <ul class="span10">
+                            <?php if (Yii::$app->user->isGuest) { ?>
+                                <p>Только зарегистрированные пользватели могут видеть зарезервирвоаные периоды</p>
+                            <?php } else { ?>
+                                <?php foreach($reservations as $k => $reserv){ ?>
+                                    <li style="display:block; width:200px">
+                                        С <?=Yii::$app->formatter->asDate($reserv->date_from)?> - по <?=Yii::$app->formatter->asDate($reserv->date_to)?>
+                                    </li>
+                                <?php } ?>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                    <?php } ?>
                     <?php if (isset($model->terms[0])) { ?>
                         <h2>Условия аренды:</h2>
                         <div class="row">

@@ -168,7 +168,7 @@ class RealtyController extends Controller
     public function actionDetail(string $url)
     {
         $model = Realty::find()
-            ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
+            ->with(['reservation', 'city', 'country', 'images', 'deviceServices', 'terms'])
             ->where(['=', 'url', $url])
             ->andWhere("(status_id = :status_id OR user_id = :user_id)",
                 [':status_id' => Status::STATUS_ACTIVE, ':user_id' => Yii::$app->user->id])
@@ -231,8 +231,11 @@ class RealtyController extends Controller
                 $reservation->addError('date_from', Yii::t('app', 'Не удалось оформить, залогинтесь пожалуста'));
             }
         }
+        $reservations = Reservation::find()->where(['=', 'realty_id', $model->id])
+            ->andWhere(['>=', 'date_from', date("Y-m-d")])
+            ->all();
 
-        return $this->render('detail', ['model' => $model, 'reservation' => $reservation]);
+        return $this->render('detail', ['model' => $model, 'reservation' => $reservation, 'reservations' => $reservations]);
     }
 
     /**
