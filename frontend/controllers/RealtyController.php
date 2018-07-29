@@ -97,6 +97,7 @@ class RealtyController extends Controller
         return $this->render('list', [
             'models' => $models,
             'pages' => $pages,
+            'filter' => 'search',
         ]);
     }
 
@@ -107,7 +108,7 @@ class RealtyController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionList(string $filter = '', int $page = 0)
+    public function actionList(string $filter, int $page = 0)
     {
         $query = Realty::find()->with(['reservation', 'images', 'status', 'country', 'city'])->where(['=', 'status_id', Status::STATUS_ACTIVE]);
         $query->leftJoin("{{%reservation}}", "{{%reservation}}.realty_id = {{%realty}}.id");
@@ -118,6 +119,10 @@ class RealtyController extends Controller
             ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
             ->limit($pages->limit);
         switch ($filter) {
+            case 'my':
+                $query->joinWith(['realtyView']);
+                $query->orderBy('views DESC');
+                break;
             case 'popular':
                 $query->joinWith(['realtyView']);
                 $query->orderBy('views DESC');
@@ -128,7 +133,7 @@ class RealtyController extends Controller
             case 'expensive':
                 $query->orderBy('price DESC');
                 break;
-            case '':
+            case 'new':
                 $query->orderBy('id DESC');
                 break;
             default:
@@ -139,6 +144,7 @@ class RealtyController extends Controller
         return $this->render('list', [
             'models' => $models,
             'pages' => $pages,
+            'filter' => $filter,
         ]);
     }
 

@@ -14,9 +14,31 @@ use yii\bootstrap\ActiveForm;
 
 /** @var $models \frontend\models\Realty[] */
 /** @var $pages \common\lib\Pagination */
+/** @var $filter string */
 
-$this->title                   = 'Недвижимость доступна для аренды';
-$this->params['breadcrumbs'][] = 'Недвижимость доступна для аренды';
+$title = 'Недвижимость доступна для аренды';
+switch ($filter) {
+    case 'my':
+        $title .= ' - мои предпочтения';
+        break;
+    case 'popular':
+        $title .= ' - популярные';
+        break;
+    case 'cheap':
+        $title .= ' - от дешевых к дорогим';
+        break;
+    case 'expensive':
+        $title .= ' - от дорогих к дешевым';
+        break;
+    case 'search':
+        $title .= '';
+        break;
+    default:
+        $title .= ' - новые предложения';
+}
+
+$this->title                   = $title;
+$this->params['breadcrumbs'][] = $title;
 $this->registerMetaTag([
     'name' => 'description',
     'content' => 'Недвижимость доступна для аренды'

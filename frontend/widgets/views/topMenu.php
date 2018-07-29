@@ -20,8 +20,13 @@ use yii\helpers\Url;
                     <li class="menuparent">
                         <span class="menuparent nolink">Аренда</span>
                         <ul>
+                            <?php if (!Yii::$app->user->isGuest) { ?>
+                                <li>
+                                    <a href="<?=Url::toRoute(['realty/list', 'filter' => 'my'])?>" title="Мои предпочтения">Мои предпочтения</a>
+                                </li>
+                            <?php } ?>
                             <li>
-                                <a href="<?=Url::toRoute(['realty/list'])?>" title="Новые предложения">Новые предложения</a>
+                                <a href="<?=Url::toRoute(['realty/list', 'filter' => 'new'])?>" title="Новые предложения">Новые предложения</a>
                             </li>
                             <li>
                                 <a href="<?=Url::toRoute(['realty/list', 'filter' => 'popular'])?>" title="Популярные">Популярные</a>
