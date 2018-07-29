@@ -15,6 +15,7 @@ class SignupForm extends Model
     public $email;
     public $password;
     public $confirm;
+    public $role;
     public $verifyCode;
 
     /**
@@ -29,6 +30,7 @@ class SignupForm extends Model
             'email' => Yii::t('app', 'Email'),
             'confirm' => Yii::t('app', 'Confirm password'),
             'verifyCode' => Yii::t('app', ''),
+            'role' => Yii::t('app', 'Role'),
         ];
     }
 
@@ -61,6 +63,9 @@ class SignupForm extends Model
             [['verifyCode'], \common\recaptcha\ReCaptchaValidator::class, 'secret' => \common\recaptcha\ReCaptcha::SECRET_KEY],
 
             [['username', 'email', 'phone'], 'filter', 'filter' => 'strip_tags'],
+
+            ['role', 'required'],
+            ['role', 'in', 'range' => array_keys(Users::listRoleForSignUp())],
         ];
     }
 

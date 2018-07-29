@@ -54,6 +54,8 @@ $this->registerMetaTag([
                             <div class="tab-pane <?=($modelSignUp->hasErrors()) ? 'active' : ''?>" id="register">
                                 <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
+                                <?= $form->field($modelSignUp, 'role')->dropDownList(\frontend\models\Users::listRoleForSignUp(), ['prompt' => '-- Выберите роль --']) ?>
+
                                 <?= $form->field($modelSignUp, 'username')->textInput(['class' => 'control-label']) ?>
 
                                 <?= $form->field($modelSignUp, 'phone')->widget(MaskedInput::class,[
@@ -68,7 +70,7 @@ $this->registerMetaTag([
                                 <?= $form->field($modelSignUp, 'confirm')->passwordInput() ?>
 
                                 <?= $form->field($modelSignUp, 'verifyCode')->widget(
-                                    \common\recaptcha\ReCaptcha::className(),
+                                    \common\recaptcha\ReCaptcha::class,
                                     ['siteKey' => \common\recaptcha\ReCaptcha::SITE_KEY]
                                 ) ?>
 

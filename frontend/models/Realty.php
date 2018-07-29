@@ -122,7 +122,7 @@ class Realty extends \common\models\Realty
                 $model->save(false);
             }
         }
-        RealtyTerm::deleteAll(['=', 'term_id', $this->id]);
+        RealtyTerm::deleteAll(['=', 'realty_id', $this->id]);
         if ($this->termIds) {
             foreach ($this->termIds as $termId) {
                 $model = new RealtyTerm();

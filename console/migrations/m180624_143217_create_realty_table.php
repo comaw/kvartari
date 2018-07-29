@@ -43,7 +43,6 @@ class m180624_143217_create_realty_table extends Migration
         $this->createIndex('country_id', '{{%realty}}', 'country_id');
         $this->createIndex('city_id', '{{%realty}}', 'city_id');
         $this->createIndex('type_housing_id', '{{%realty}}', 'type_housing_id');
-        $this->createIndex('term_id', '{{%realty}}', 'type_housing_id');
         $this->createIndex('created', '{{%realty}}', 'created');
         $this->createIndex('updated', '{{%realty}}', 'updated');
 
@@ -53,7 +52,6 @@ class m180624_143217_create_realty_table extends Migration
         $this->addForeignKey('country_id', '{{%realty}}', 'country_id', '{{%country}}', 'id', 'RESTRICT', 'CASCADE');
         $this->addForeignKey('city_id', '{{%realty}}', 'city_id', '{{%city}}', 'id', 'RESTRICT', 'CASCADE');
         $this->addForeignKey('type_housing_id', '{{%realty}}', 'type_housing_id', '{{%type_housing}}', 'id', 'RESTRICT', 'CASCADE');
-        $this->addForeignKey('term_id', '{{%realty}}', 'term_id', '{{%term}}', 'id', 'RESTRICT', 'CASCADE');
     }
 
     /**
@@ -66,6 +64,7 @@ class m180624_143217_create_realty_table extends Migration
         $this->dropForeignKey('country_id', '{{%realty}}');
         $this->dropForeignKey('city_id', '{{%realty}}');
         $this->dropForeignKey('type_housing_id', '{{%realty}}');
+        $this->dropForeignKey('term_id', '{{%realty}}');
         $this->dropTable('{{%realty}}');
     }
 }

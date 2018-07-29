@@ -195,7 +195,7 @@ function InitPriceSlider() {
             jQuery('.price-value .to').text(ui.values[1]);
             jQuery('.price-value .to').currency({ region: 'GBP', thousands: ' ', decimal: ',', decimals: 0 });
         }
-    // });
+    });
 }
 
 function InitEzmark() {

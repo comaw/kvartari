@@ -5,6 +5,7 @@ use frontend\models\Realty;
 use frontend\models\Reservation;
 use frontend\models\search\RealtySearch;
 use frontend\models\User;
+use frontend\models\UserRealtySearch;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -74,6 +75,20 @@ class UserController extends Controller
     public function actionProfile()
     {
         $model = User::findIdentity(Yii::$app->user->id);
+        $modelRealtySearch = UserRealtySearch::find()->where(['=', 'user_id', Yii::$app->user->id])->one();
+        if (!$modelRealtySearch) {
+            $modelRealtySearch = new UserRealtySearch();
+            $modelRealtySearch->user_id = Yii::$app->user->id;
+        }
+        $modelRealtySearch->setServiceDeviceIds();
+        $modelRealtySearch->setTermIds();
+
+        if ($modelRealtySearch->load(Yii::$app->request->post()) && $modelRealtySearch->validate()) {
+            $modelRealtySearch->save(false);
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Успешно сохранено!'));
+
+            return $this->refresh();
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->password && $model->confirm == $model->password) {
@@ -85,6 +100,6 @@ class UserController extends Controller
             return $this->refresh();
         }
 
-        return $this->render('profile', ['model' => $model]);
+        return $this->render('profile', ['model' => $model, 'modelRealtySearch' => $modelRealtySearch]);
     }
 }

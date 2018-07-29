@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\Users;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -78,7 +79,11 @@ class SiteController extends Controller
         if ($modelSignUp->load(Yii::$app->request->post())) {
             if ($user = $modelSignUp->signup()) {
                 if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
+                    if ($modelSignUp->role == Users::ROLE_TENANT) {
+                        return $this->redirect(['user/profile']);
+                    }
+
+                    return $this->redirect(['realty/create']);
                 }
             }
         }
@@ -152,7 +157,11 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
+                    if ($model->role == Users::ROLE_TENANT) {
+                        return $this->redirect(['users/demands']);
+                    }
+
+                    return $this->redirect(['realty/create']);
                 }
             }
         }
