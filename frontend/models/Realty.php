@@ -217,4 +217,25 @@ class Realty extends \common\models\Realty
     {
         return $this->hasMany(Image::class, ['realty_id' => 'id'])->orderBy('position ASC');
     }
+
+    /**
+     * @param int $id
+     * @return array|static
+     */
+    public static function getMyCurrentRealty(int $id)
+    {
+        return static::find()->where(['=', 'user_id', Yii::$app->user->id])->andWhere(['=', 'id', $id])->one();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMyRealty(): array
+    {
+        return ArrayHelper::map(static::find()
+            ->select(['id', 'title'])
+            ->where(['=', 'user_id', Yii::$app->user->id])
+            ->andWhere(['=', 'status_id', Status::STATUS_ACTIVE])
+            ->all(), 'id', 'title');
+    }
 }

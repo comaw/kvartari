@@ -18,6 +18,9 @@ use yii\helpers\Url;
         <?php } ?>
 		<?php if (!Yii::$app->user->isGuest) { ?>
         <li>
+            <a href="<?=Url::toRoute(['offer/personal'])?>" title="Предложения">Предложения</a>
+        </li>
+        <li>
             <a href="<?=Url::toRoute(['user/realty'])?>" title="Мои аренды">Мои аренды</a>
         </li>
         <li>

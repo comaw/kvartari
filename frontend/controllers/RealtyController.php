@@ -33,10 +33,10 @@ class RealtyController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['create', 'personal'],
+                'only' => ['create', 'personal', 'tenant'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'personal'],
+                        'actions' => ['create', 'personal', 'tenant'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -88,7 +88,7 @@ class RealtyController extends Controller
         }
         $query->leftJoin("{{%reservation}}", "{{%reservation}}.realty_id = {{%realty}}.id");
         $countQuery = clone $query;
-        $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
+        $pages = new Pagination(['pageSize' => 15, 'totalCount' => $countQuery->count()]);
         $query->offset($pages->offset)
             ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
             ->limit($pages->limit)
@@ -100,6 +100,44 @@ class RealtyController extends Controller
             'models' => $models,
             'pages' => $pages,
             'filter' => 'search',
+        ]);
+    }
+
+    /**
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionTenant()
+    {
+        $realty = null;
+        if ($realtyId = Yii::$app->request->get('realty')) {
+            $realty = Realty::getMyCurrentRealty($realtyId);
+            if (!$realty) {
+                throw new NotFoundHttpException();
+            }
+        }
+        $models = [];
+        if ($realty) {
+            $sql = UserRealtySearch::find();
+            $sql->where("country_id = :country_id AND city_id = :city_id AND type_housing_id = :type_housing_id", [
+                    ':country_id' => $realty->country_id,
+                    ':city_id' => $realty->country_id,
+                    ':type_housing_id' => $realty->country_id,
+                ]);
+            $sql->andWhere("places = :places OR places IS NULL", [':places' => $realty->places]);
+            $sql->andWhere("footage = :footage OR footage IS NULL", [':footage' => $realty->footage]);
+            $sql->andWhere("number_rooms = :number_rooms OR number_rooms IS NULL", [':number_rooms' => $realty->number_rooms]);
+            $sql->andWhere("price_from <= :price_from OR price_from IS NULL", [':price_from' => $realty->price]);
+            $sql->andWhere("price_to >= :price_to OR price_to IS NULL", [':price_to' => $realty->price]);
+            $sql->limit(50);
+            $sql->orderBy('id DESC');
+            $models = $sql->all();
+        }
+
+
+        return $this->render('tenant', [
+            'models' => $models,
+            'realty' => $realty,
         ]);
     }
 
@@ -124,7 +162,7 @@ class RealtyController extends Controller
         }
 
         $countQuery = clone $query;
-        $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
+        $pages = new Pagination(['pageSize' => 15, 'totalCount' => $countQuery->count()]);
         $query->offset($pages->offset)->limit($pages->limit);
         switch ($filter) {
             case 'my':

@@ -17,6 +17,9 @@ use yii\helpers\Url;
                     <li>
                         <a href="<?=Url::home()?>" title="Главная">Главная</a>
                     </li>
+                    <li>
+                        <a href="<?=Url::toRoute(['realty/tenant'])?>" title="Искать съемщика">Искать съемщика</a>
+                    </li>
                     <li class="menuparent">
                         <span class="menuparent nolink">Аренда</span>
                         <ul>
