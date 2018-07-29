@@ -11,6 +11,8 @@ use frontend\models\ReservationAddresses;
 use frontend\models\SignupForm;
 use frontend\models\Status;
 use frontend\models\UserAddress;
+use frontend\models\UserRealtySearch;
+use frontend\models\UserRealtySearchTerm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -111,17 +113,22 @@ class RealtyController extends Controller
     public function actionList(string $filter, int $page = 0)
     {
         $query = Realty::find()->with(['reservation', 'images', 'status', 'country', 'city'])->where(['=', 'status_id', Status::STATUS_ACTIVE]);
+        $query->with(['city', 'country', 'images', 'deviceServices', 'terms']);
         $query->leftJoin("{{%reservation}}", "{{%reservation}}.realty_id = {{%realty}}.id");
+        if ($filter == 'my') {
+            if (!Yii::$app->user->isGuest) {
+                $query = UserRealtySearch::findCreate($query);
+            } else {
+                throw new NotFoundHttpException();
+            }
+        }
 
         $countQuery = clone $query;
         $pages = new Pagination(['pageSize' => 2, 'totalCount' => $countQuery->count()]);
-        $query->offset($pages->offset)
-            ->with(['city', 'country', 'images', 'deviceServices', 'terms'])
-            ->limit($pages->limit);
+        $query->offset($pages->offset)->limit($pages->limit);
         switch ($filter) {
             case 'my':
-                $query->joinWith(['realtyView']);
-                $query->orderBy('views DESC');
+                $query->orderBy('id DESC');
                 break;
             case 'popular':
                 $query->joinWith(['realtyView']);
